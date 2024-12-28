@@ -25,7 +25,6 @@
     </div>
     <!-- * loader -->
 
-
     <!-- App Capsule -->
     <div id="appCapsule" class="pt-8">
 
@@ -38,50 +37,33 @@
                 <h4>Harap login terlebih dahulu!</h4>
             </div>
             <div class="section mt-1 mb-5">
-                <form action="/prosesLogin" method="POST">
+                <!-- Menampilkan error jika ada -->
+                @if ($errors->has('email'))
+                    <div class="alert alert-danger text-center mt-3">
+                        {{ $errors->first('email') }}
+                    </div>
+                @endif
+                <form action="/reset-password" method="POST">
                     @csrf
-                    @if ($errors->has('login'))
-                        <div class="alert alert-danger text-center mt-3">
-                            {{ $errors->first('login') }}
-                        </div>
-                    @endif
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="text" name="nip" class="form-control" id="nomorinduk" placeholder="NIP"
-                                inputmode="numeric" pattern="[0-9]*"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                            <input type="email" name="email" class="form-control" id="email"
+                                placeholder="Enter your registered email" required>
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
                         </div>
-                    </div>
-
-                    <div class="form-group boxed">
-                        <div class="input-wrapper">
-                            <input type="password" name="password" class="form-control" id="password"
-                                placeholder="Password" required>
-                            <i class="clear-input">
-                                <ion-icon name="close-circle"></ion-icon>
-                            </i>
-                        </div>
-                    </div>
-
-                    <div class="form-links mt-2">
-                        <div><a href="{{ route('password.request') }}" class="text-muted">Forgot Password?</a></div>
                     </div>
 
                     <div class="form-button-group">
-                        <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Send Reset Link</button>
                     </div>
                 </form>
             </div>
         </div>
 
-
     </div>
     <!-- * App Capsule -->
-
-
 
     <!-- ///////////// Js Files ////////////////////  -->
     <!-- Jquery -->
@@ -97,7 +79,6 @@
     <script src="{{ asset('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
     <!-- Base Js File -->
     <script src="{{ asset('assets/js/base.js') }}"></script>
-
 
 </body>
 
