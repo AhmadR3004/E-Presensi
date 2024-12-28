@@ -6,34 +6,38 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardUserController;
-use App\Http\Controllers\Auth;
+use App\Http\Controllers\DashboardController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 | Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+|-------------------------------------------------------------------------- 
+| 
+| Here is where you can register web routes for your application. These 
+| routes are loaded by the RouteServiceProvider and all of them will 
+| be assigned to the "web" middleware group. Make something great! 
 |
 */
 
 Route::get('/', function () {
     return view('auth.login-user');
-});
+})->name('login-user');
 
 Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
 
-Route::middleware('auth.pegawai')->group(function () {
+Route::middleware('auth:pegawai')->group(function () {
     Route::get('/user', [DashboardUserController::class, 'index']);
-    Route::get('/logout', [AuthController::class, 'prosesLogout']);
+    Route::get('/prosesLogout', [AuthController::class, 'prosesLogout']);
 });
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware('auth')->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
