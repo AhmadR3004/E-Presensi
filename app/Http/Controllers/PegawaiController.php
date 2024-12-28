@@ -10,10 +10,27 @@ use Illuminate\Support\Facades\Storage;
 class PegawaiController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $pegawais = Pegawai::with('jabatan')->orderBy('created_at', 'desc')->paginate(10);
+        // Membuat query untuk model Pegawai
+        $query = Pegawai::with('jabatan')->orderBy('created_at', 'desc');
+
+        // Cek apakah ada parameter pencarian
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+
+            // Menambahkan kondisi pencarian untuk 'nama' dan 'nip'
+            $query->where('nama', 'like', '%' . $search . '%')
+                ->orWhere('nip', 'like', '%' . $search . '%');
+        }
+
+        // Melakukan paginate pada hasil query dengan 10 data per halaman
+        $pegawais = $query->paginate(10);
+
+        // Mengambil semua data Jabatan
         $jabatans = Jabatan::all();
+
+        // Mengirim data pegawai dan jabatan ke view
         return view('pegawai.index', compact('pegawais', 'jabatans'));
     }
 

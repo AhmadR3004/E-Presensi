@@ -9,8 +9,10 @@ class Pegawai extends Model
 {
     use HasFactory;
 
+    public $incrementing = false; // Karena id bukan auto increment
+    protected $keyType = 'string'; // Karena id bertipe string
     protected $table = 'pegawai';
-    
+
     protected $fillable = [
         'foto',
         'nama',
@@ -28,5 +30,14 @@ class Pegawai extends Model
     public function jabatan()
     {
         return $this->belongsTo(Jabatan::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->id = $model->nip; // Set id sama dengan nip saat membuat record baru
+        });
     }
 }
