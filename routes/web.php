@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -23,6 +25,11 @@ Route::get('/', function () {
 });
 
 Route::get('/user', [DashboardUserController::class, 'index']);
+Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
+
+Route::middleware('auth.pegawai')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

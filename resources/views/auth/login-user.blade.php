@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>E-Presensi Pegawai</title>
+    <title>Login E-Presensi Pegawai</title>
     <meta name="description" content="Mobilekit HTML Mobile UI Kit">
     <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
     <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}" sizes="32x32">
@@ -38,12 +38,18 @@
                 <h4>Harap login terlebih dahulu!</h4>
             </div>
             <div class="section mt-1 mb-5">
-                <form action="/proseslogin" method="POST">
+                <form action="/prosesLogin" method="POST">
                     @csrf
+                    @if ($errors->has('login'))
+                        <div class="alert alert-danger text-center mt-3">
+                            {{ $errors->first('login') }}
+                        </div>
+                    @endif
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="text" name="Nomor Induk" class="form-control" id="nomorinduk"
-                                placeholder="Nomer Induk">
+                            <input type="text" name="nip" class="form-control" id="nomorinduk" placeholder="NIP"
+                                inputmode="numeric" pattern="[0-9]*"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
@@ -53,7 +59,7 @@
                     <div class="form-group boxed">
                         <div class="input-wrapper">
                             <input type="password" name="password" class="form-control" id="password"
-                                placeholder="Password">
+                                placeholder="Password" required>
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
@@ -67,7 +73,6 @@
                     <div class="form-button-group">
                         <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button>
                     </div>
-
                 </form>
             </div>
         </div>

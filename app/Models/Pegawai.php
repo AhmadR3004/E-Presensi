@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Pegawai extends Model
+class Pegawai extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     public $incrementing = false; // Karena id bukan auto increment
     protected $keyType = 'string'; // Karena id bertipe string
-    protected $table = 'pegawai';
+    protected $primaryKey = 'id'; // Set primary key
+    protected $table = 'pegawai'; // Sesuaikan dengan nama tabel di database
 
     protected $fillable = [
         'foto',
@@ -25,6 +30,16 @@ class Pegawai extends Model
         'tanggal_masuk',
         'email',
         'password'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     public function jabatan()
