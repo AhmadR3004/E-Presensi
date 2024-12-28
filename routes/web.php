@@ -31,12 +31,6 @@ Route::middleware('auth.pegawai')->group(function () {
     Route::get('/logout', [AuthController::class, 'prosesLogout']);
 });
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password-user');
-})->name('password.request');
-
-Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
