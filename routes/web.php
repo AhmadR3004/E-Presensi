@@ -24,11 +24,11 @@ Route::get('/', function () {
     return view('auth.login-user');
 });
 
-Route::get('/user', [DashboardUserController::class, 'index']);
 Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
 
 Route::middleware('auth.pegawai')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/user', [DashboardUserController::class, 'index']);
+    Route::get('/logout', [AuthController::class, 'prosesLogout']);
 });
 
 Route::get('/forgot-password', function () {

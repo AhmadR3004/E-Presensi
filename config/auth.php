@@ -42,7 +42,7 @@ return [
         ],
         'pegawai' => [
             'driver' => 'session',
-            'provider' => 'pegawai',
+            'provider' => 'pegawais',
         ],
         'user' => [
             'driver' => 'session',
@@ -72,7 +72,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'pegawai' => [
+        'pegawais' => [
             'driver' => 'eloquent',
             'model' => App\Models\pegawai::class,
         ],

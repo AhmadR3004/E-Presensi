@@ -21,25 +21,11 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword(Request $request)
+    public function prosesLogout()
     {
-        // Validasi input form
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:8', // pastikan password minimal 8 karakter
-        ]);
-
-        // Cari user berdasarkan email
-        $user = User::where('email', $request->email)->first();
-
-        if ($user) {
-            // Update password
-            $user->password = bcrypt($request->password);
-            $user->save();
-
-            return redirect()->route('login')->with('status', 'Password berhasil direset!');
+        if (Auth::guard('pegawai')->check()) {
+            Auth::guard('pegawai')->logout();
+            return redirect('/');
         }
-
-        return back()->withErrors(['email' => 'Email tidak ditemukan']);
     }
 }
