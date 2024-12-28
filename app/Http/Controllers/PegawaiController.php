@@ -36,13 +36,15 @@ class PegawaiController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
 
+        // Cek jika ada foto, dan simpan di folder fotos dalam public storage
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('fotos', 'public');
         }
 
+        // Simpan pegawai ke database
         Pegawai::create($data);
 
-        return redirect()->route('pegawai.index')->with('success', 'Pegawai created successfully.');
+        return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil ditambahkan');
     }
 
     public function show($id)
@@ -60,6 +62,7 @@ class PegawaiController extends Controller
             'jabatans' => $jabatans
         ]);
     }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -85,13 +88,21 @@ class PegawaiController extends Controller
             unset($data['password']);
         }
 
+        // Cek jika ada foto baru, dan simpan di folder fotos dalam public storage
         if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($pegawai->foto) {
+                Storage::disk('public')->delete($pegawai->foto);
+            }
+
+            // Simpan foto baru
             $data['foto'] = $request->file('foto')->store('fotos', 'public');
         }
 
+        // Update data pegawai
         $pegawai->update($data);
 
-        return redirect()->route('pegawai.index')->with('success', 'Pegawai updated successfully.');
+        return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil diperbarui');
     }
 
     public function destroy($id)
