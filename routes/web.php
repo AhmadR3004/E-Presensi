@@ -7,6 +7,7 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PresensiController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -20,16 +21,19 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login-user');
-})->name('login-user');
-
-Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
+Route::middleware('guest:pegawai')->group(function () {
+    Route::get('/', function () {
+        return view('auth.login-user');
+    })->name('login-user');
+    Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
+});
 
 Route::middleware('auth:pegawai')->group(function () {
     Route::get('/user', [DashboardUserController::class, 'index']);
     Route::get('/prosesLogout', [AuthController::class, 'prosesLogout']);
 });
+
+Route::get('/presensi/create', [PresensiController::class, 'create']);
 
 Route::get('/login', function () {
     return view('auth.login');

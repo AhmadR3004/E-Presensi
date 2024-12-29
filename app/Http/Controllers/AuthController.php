@@ -17,7 +17,7 @@ class AuthController extends Controller
             return redirect('/user');
         } else {
             return redirect('/')
-                ->withErrors(['login' => 'NIP atau password salah!']);
+                ->withErrors(['login' => 'NIP atau Password salah!']);
         }
     }
 
