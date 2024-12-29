@@ -83,7 +83,7 @@ class PresensiController extends Controller
                 echo "success|Terima kasih, Selamat Bekerja|in";
                 Storage::put($file, $image_base64);
             } else {
-                echo "error|Maaf gagal absen, hubungi Tim IT|in";
+                echo "error|Maaf gagal absen, hubungi Tim IT|out";
             }
         }
     }

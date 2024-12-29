@@ -60,10 +60,18 @@
             @endif
         </div>
     </div>
+    <audio id="notifikasi_in">
+        <source src="{{ asset('assets/sound/notifikasi_in.mp3') }}" type="audio/mpeg">
+    </audio>
+    <audio id="notifikasi_out">
+        <source src="{{ asset('assets/sound/notifikasi_out.mp3') }}" type="audio/mpeg">
+    </audio>
 @endsection
 
 @push('myscript')
     <script>
+        var notifikasi_in = document.getElementById('notifikasi_in');
+        var notifikasi_out = document.getElementById('notifikasi_out');
         Webcam.set({
             width: 640,
             height: 480,
@@ -114,6 +122,11 @@
                 success: function(respond) {
                     var status = respond.split('|');
                     if (status[0] == "success") {
+                        if (status[2] == "in") {
+                            notifikasi_in.play();
+                        } else {
+                            notifikasi_out.play();
+                        }
                         Swal.fire({
                             title: 'Absen berhasil',
                             text: status[1],
