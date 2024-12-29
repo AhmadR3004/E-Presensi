@@ -42,8 +42,13 @@
     </div>
     <div class="row">
         <div class="col">
-            <button id="takeabsen" class="btn btn-primary btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
-                Masuk</button>
+            @if ($cek > 0)
+                <button id="takeabsen" class="btn btn-danger btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
+                    Pulang</button>
+            @else
+                <button id="takeabsen" class="btn btn-primary btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
+                    Masuk</button>
+            @endif
         </div>
     </div>
 @endsection
@@ -80,7 +85,42 @@
         }
 
         function errorCallback(error) {
-            console.log('Error occurred. Error code: ' + error.code);
+
         }
+
+        $('#takeabsen').click(function(e) {
+            Webcam.snap(function(uri) {
+                image = uri;
+            });
+            var lokasi = $('#lokasi').val();
+            $.ajax({
+                type: 'POST',
+                url: '/presensi/store',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    image: image,
+                    lokasi: lokasi
+                },
+                cache: false,
+                success: function(respond) {
+                    var status = respond.split('|');
+                    if (status[0] == "success") {
+                        Swal.fire({
+                            title: 'Absen berhasil',
+                            text: status[1],
+                            icon: 'success',
+                        })
+                        setTimeout("location.href = '/user'", 3000);
+                    } else {
+                        Swal.fire({
+                            title: 'Error !',
+                            text: 'Maaf Gagal Absen, Silahkan Coba Lagi',
+                            icon: 'error',
+                        })
+                        setTimeout("location.href = '/user'", 3000);
+                    }
+                }
+            });
+        });
     </script>
 @endpush

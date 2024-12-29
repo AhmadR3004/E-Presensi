@@ -74,7 +74,7 @@ return [
         ],
         'pegawais' => [
             'driver' => 'eloquent',
-            'model' => App\Models\pegawai::class,
+            'model' => App\Models\Pegawai::class,
         ],
 
         // 'users' => [
