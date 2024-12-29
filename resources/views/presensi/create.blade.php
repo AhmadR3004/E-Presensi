@@ -20,10 +20,21 @@
             margin: auto;
             border-radius: 10px;
         }
+
+        #map {
+            height: 250px;
+        }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 @endsection
 @section('content')
     <div class="row" style="margin-top: 65px;">
+        <div class="col">
+            <div id="map"></div>
+        </div>
+    </div>
+    <div class="row mt-1">
         <div class="col">
             <input type="hidden" id="lokasi">
             <div class="webcam-capture"></div>
@@ -54,6 +65,18 @@
 
         function successCallback(position) {
             lokasi.value = position.coords.latitude + ',' + position.coords.longitude;
+            var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 18);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+            var circle = L.circle([position.coords.latitude, position.coords.longitude], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 20
+            }).addTo(map);
         }
 
         function errorCallback(error) {
