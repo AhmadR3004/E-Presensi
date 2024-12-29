@@ -13,7 +13,30 @@ class PresensiController extends Controller
     {
         $hariini = date('Y-m-d');
         $pegawai_id = Auth::guard('pegawai')->user()->nip;
-        $cek = DB::table('presensi')->where('tgl_presensi', $hariini)->where('pegawai_id', $pegawai_id)->count();
+
+        // Cek apakah sudah ada absen masuk untuk hari ini
+        $presensiMasuk = DB::table('presensi')
+            ->where('tgl_presensi', $hariini)
+            ->where('pegawai_id', $pegawai_id)
+            ->whereNotNull('jam_in') // Cek apakah jam_in sudah ada
+            ->first();
+
+        // Cek apakah sudah ada absen pulang untuk hari ini
+        $presensiPulang = DB::table('presensi')
+            ->where('tgl_presensi', $hariini)
+            ->where('pegawai_id', $pegawai_id)
+            ->whereNotNull('jam_out') // Cek apakah jam_out sudah ada
+            ->first();
+
+        // Tentukan status absen berdasarkan apakah sudah absen masuk dan pulang
+        if ($presensiMasuk && $presensiPulang) {
+            $cek = 2; // Sudah absen masuk dan pulang
+        } elseif ($presensiMasuk) {
+            $cek = 1; // Hanya absen masuk
+        } else {
+            $cek = 0; // Belum absen sama sekali
+        }
+
         return view('presensi.create', compact('cek'));
     }
 

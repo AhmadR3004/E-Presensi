@@ -42,12 +42,21 @@
     </div>
     <div class="row">
         <div class="col">
-            @if ($cek > 0)
-                <button id="takeabsen" class="btn btn-danger btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
-                    Pulang</button>
-            @else
-                <button id="takeabsen" class="btn btn-primary btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
-                    Masuk</button>
+            @if ($cek == 0)
+                <!-- Absen Masuk -->
+                <button id="takeabsen" class="btn btn-primary btn-block">
+                    <ion-icon name="camera-outline"></ion-icon> Absen Masuk
+                </button>
+            @elseif ($cek == 1)
+                <!-- Absen Pulang -->
+                <button id="takeabsen" class="btn btn-danger btn-block">
+                    <ion-icon name="camera-outline"></ion-icon> Absen Pulang
+                </button>
+            @elseif ($cek == 2)
+                <!-- Sudah Absen Masuk dan Pulang -->
+                <button id="takeabsen" class="btn btn-secondary btn-block" disabled>
+                    <ion-icon name="camera-outline"></ion-icon> Sudah Absen Hari Ini
+                </button>
             @endif
         </div>
     </div>
