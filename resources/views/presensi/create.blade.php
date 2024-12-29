@@ -66,12 +66,16 @@
     <audio id="notifikasi_out">
         <source src="{{ asset('assets/sound/notifikasi_out.mp3') }}" type="audio/mpeg">
     </audio>
+    <audio id="radius">
+        <source src="{{ asset('assets/sound/radius.mp3') }}" type="audio/mpeg">
+    </audio>
 @endsection
 
 @push('myscript')
     <script>
         var notifikasi_in = document.getElementById('notifikasi_in');
         var notifikasi_out = document.getElementById('notifikasi_out');
+        var radius = document.getElementById('radius');
         Webcam.set({
             width: 640,
             height: 480,
@@ -87,17 +91,17 @@
 
         function successCallback(position) {
             lokasi.value = position.coords.latitude + ',' + position.coords.longitude;
-            var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 18);
+            var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 19);
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
+                maxZoom: 20,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
             var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-            var circle = L.circle([position.coords.latitude, position.coords.longitude], {
+            var circle = L.circle([-3.334345495834711, 114.59274160520408], {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,
-                radius: 20
+                radius: 10
             }).addTo(map);
         }
 
@@ -134,9 +138,12 @@
                         })
                         setTimeout("location.href = '/user'", 3000);
                     } else {
+                        if (status[2] == "radius") {
+                            radius.play();
+                        }
                         Swal.fire({
                             title: 'Error !',
-                            text: 'Maaf Gagal Absen, Silahkan Coba Lagi',
+                            text: status[1],
                             icon: 'error',
                         })
                         setTimeout("location.href = '/user'", 3000);
