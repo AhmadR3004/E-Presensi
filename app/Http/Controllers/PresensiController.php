@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class PresensiController extends Controller
@@ -120,5 +122,56 @@ class PresensiController extends Controller
         $kilometers = $miles * 1.609344;
         $meters = $kilometers * 1000;
         return compact('meters');
+    }
+
+    public function editProfile()
+    {
+        $nip = Auth::guard('pegawai')->user()->id;
+        $pegawai = DB::table('pegawai')->where('nip', $nip)->first();
+
+        return view('presensi.editProfile', compact('pegawai'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $nip = Auth::guard('pegawai')->user()->id;
+        $nama = $request->nama;
+        $no_telp = $request->no_telp;
+        $password = Hash::make($request->password);
+        $pegawai = DB::table('pegawai')->where('nip', $nip)->first();
+
+        if ($request->hasFile('foto')) {
+            $foto = $nip . '.' . $request->file('foto')->getClientOriginalExtension();
+        } else {
+            $foto = $pegawai->foto;
+        }
+
+        if (empty($request->password)) {
+            $data = [
+                'nama' => $nama,
+                'no_telp' => $no_telp,
+                'foto' => $foto,
+                'updated_at' => now(),
+            ];
+        } else {
+            $data = [
+                'nama' => $nama,
+                'no_telp' => $no_telp,
+                'password' => $password,
+                'foto' => $foto,
+                'updated_at' => now(),
+            ];
+        }
+
+        $update = DB::table('pegawai')->where('id', $nip)->update($data);
+        if ($update) {
+            if ($request->hasFile('foto')) {
+                $folderpath = "public/uploads/pegawai/";
+                $request->file('foto')->storeAs($folderpath, $foto);
+            }
+            return Redirect::back()->with(['success' => 'Data berhasil diupdate']);
+        } else {
+            return Redirect::back()->with(['error' => 'Data gagal diupdate']);
+        }
     }
 }

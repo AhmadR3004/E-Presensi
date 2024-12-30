@@ -74,7 +74,7 @@
                                             <th scope="row"
                                                 class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 <div class="flex items-center">
-                                                    <img src="{{ $pegawai->foto ? asset('storage/' . $pegawai->foto) : asset('default.jpg') }}"
+                                                    <img src="{{ $pegawai->foto ? asset('storage/uploads/pegawai/' . $pegawai->foto) : asset('default.jpg') }}"
                                                         alt="Foto Pegawai" class="w-14 h-14 rounded-full">
                                                 </div>
                                             </th>
@@ -226,7 +226,8 @@
                 'Perempuan';
             document.getElementById('show_tanggal_masuk').innerText = pegawai.tanggal_masuk;
             document.getElementById('show_email').innerText = pegawai.email;
-            document.getElementById('show_foto').src = pegawai.foto ? `/storage/${pegawai.foto}` : `default.jpg`;
+            document.getElementById('show_foto').src = pegawai.foto ? `/storage/uploads/pegawai/${pegawai.foto}` :
+                `default.jpg`;
         }
     </script>
     <script>

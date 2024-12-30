@@ -53,9 +53,19 @@ class PegawaiController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
 
-        // Cek jika ada foto, dan simpan di folder fotos dalam public storage
+        // Ambil nip dari request yang dikirimkan di form
+        $nip = $data['nip'];
+
+        // Cek jika ada foto, dan simpan di folder yang sama dalam public storage
         if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('fotos', 'public');
+            // Membuat nama file berdasarkan NIP dan ekstensi foto
+            $fotoName = $nip . '.' . $request->file('foto')->getClientOriginalExtension();
+
+            // Menyimpan foto ke folder public storage dan mengambil nama file saja
+            $request->file('foto')->storeAs('uploads/pegawai', $fotoName, 'public');
+
+            // Menyimpan nama file foto (tanpa path) ke dalam database
+            $data['foto'] = $fotoName; // Menyimpan hanya nama file tanpa path
         }
 
         // Simpan pegawai ke database
@@ -99,21 +109,28 @@ class PegawaiController extends Controller
         $pegawai = Pegawai::findOrFail($id);
         $data = $request->all();
 
+        // Cek dan update password jika diisi
         if ($request->filled('password')) {
             $data['password'] = bcrypt($data['password']);
         } else {
             unset($data['password']);
         }
 
-        // Cek jika ada foto baru, dan simpan di folder fotos dalam public storage
+        // Cek jika ada foto baru, dan simpan di folder yang sama dalam public storage
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
             if ($pegawai->foto) {
-                Storage::disk('public')->delete($pegawai->foto);
+                Storage::disk('public')->delete('uploads/pegawai/' . $pegawai->foto);
             }
 
-            // Simpan foto baru
-            $data['foto'] = $request->file('foto')->store('fotos', 'public');
+            // Ambil nama file foto baru dengan nama berdasarkan NIP
+            $fotoName = $pegawai->nip . '.' . $request->file('foto')->getClientOriginalExtension();
+
+            // Simpan foto baru dan ambil nama file saja (tanpa path folder)
+            $request->file('foto')->storeAs('uploads/pegawai', $fotoName, 'public');
+
+            // Simpan hanya nama file di database (tanpa path folder)
+            $data['foto'] = $fotoName;
         }
 
         // Update data pegawai
@@ -126,11 +143,13 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::findOrFail($id);
 
-        // Hapus file foto dari direktori public
+        // Hapus file foto dari direktori public jika ada
         if ($pegawai->foto) {
-            Storage::disk('public')->delete($pegawai->foto);
+            // Menghapus file foto berdasarkan nama file (tanpa path folder)
+            Storage::disk('public')->delete('uploads/pegawai/' . $pegawai->foto);
         }
 
+        // Hapus data pegawai
         $pegawai->delete();
 
         return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil dihapus.');

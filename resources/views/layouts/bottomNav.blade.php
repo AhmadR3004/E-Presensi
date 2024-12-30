@@ -5,10 +5,11 @@
             <strong>Home</strong>
         </div>
     </a>
-    <a href="#" class="item {{ request()->is('presensi') ? 'active' : '' }}">
+    <a href="#" class="item {{ request()->is('Histori') ? 'active' : '' }}">
         <div class="col">
-            <ion-icon name="calendar-outline" role="img" class="md hydrated" aria-label="calendar outline"></ion-icon>
-            <strong>Calendar</strong>
+            <ion-icon name="document-text-outline" role="img" class="md hydrated"
+                aria-label="document text outline"></ion-icon>
+            <strong>Histori</strong>
         </div>
     </a>
     <a href="/presensi/create" class="item">
@@ -18,14 +19,14 @@
             </div>
         </div>
     </a>
-    <a href="#" class="item {{ request()->is('docs') ? 'active' : '' }}">
+    <a href="#" class="item {{ request()->is('izin') ? 'active' : '' }}">
         <div class="col">
             <ion-icon name="document-text-outline" role="img" class="md hydrated"
                 aria-label="document text outline"></ion-icon>
-            <strong>Docs</strong>
+            <strong>Izin</strong>
         </div>
     </a>
-    <a href="javascript:;" class="item {{ request()->is('Profile') ? 'active' : '' }}">
+    <a href="/editProfile" class="item {{ request()->is('editProfile') ? 'active' : '' }}">
         <div class="col">
             <ion-icon name="people-outline" role="img" class="md hydrated" aria-label="people outline"></ion-icon>
             <strong>Profile</strong>
