@@ -11,7 +11,7 @@ class DashboardUserController extends Controller
     public function index()
     {
         $hariini = date('Y-m-d');
-        $bulanini = date('m');
+        $bulanini = date('m') * 1;
         $tahunini = date('Y');
         $nip = Auth::guard('pegawai')->user()->nip;
         $presensihariini = DB::table('presensi')
@@ -24,6 +24,7 @@ class DashboardUserController extends Controller
             ->orderBy('tgl_presensi')
             ->get();
 
-        return view('DashboardUser.dashboard', compact('presensihariini', 'historibulanini'));
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        return view('DashboardUser.dashboard', compact('presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini'));
     }
 }

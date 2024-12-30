@@ -72,12 +72,12 @@
                                         @php
                                             $path = Storage::url('uploads/absensi/' . $presensihariini->foto_in);
                                         @endphp
-                                        <img src="{{ url($path) }}" alt="" class="imaged w64">
+                                        <img src="{{ url($path) }}" alt="" class="imaged w48">
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
                                 </div>
-                                <div class="presencedetail" style="margin-left: 2px">
+                                <div class="presencedetail" style="margin-left: 1px">
                                     <h4 class="presencetitle">Masuk</h4>
                                     <span>{{ $presensihariini != null ? \Carbon\Carbon::parse($presensihariini->jam_in)->format('H:i') : 'Belum Absen' }}</span>
                                 </div>
@@ -94,12 +94,12 @@
                                         @php
                                             $path = Storage::url('uploads/absensi/' . $presensihariini->foto_out);
                                         @endphp
-                                        <img src="{{ url($path) }}" alt="" class="imaged w64">
+                                        <img src="{{ url($path) }}" alt="" class="imaged w48">
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
                                 </div>
-                                <div class="presencedetail" style="margin-left: 2px">
+                                <div class="presencedetail" style="margin-left: 1px">
                                     <h4 class="presencetitle">Pulang</h4>
                                     <span>{{ $presensihariini != null && $presensihariini->jam_out != null ? \Carbon\Carbon::parse($presensihariini->jam_out)->format('H:i') : 'Belum Absen' }}</span>
                                 </div>
@@ -110,6 +110,56 @@
             </div>
         </div>
 
+        <div id="rekapPresensi">
+            <h3 style="margin: 0.1px !important; ">Rekap Presensi</h3>
+            <h4>Bulan {{ $namabulan[$bulanini] }} Tahun {{ $tahunini }}</h4>
+            <div class="row">
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 12px 12px !important; line-height: 0.8rem;">
+                            <span class="badge bg-danger"
+                                style="position: absolute; top: 2px; right: 2px; z-index: 999">10</span>
+                            <ion-icon name="accessibility" style="font-size: 1.6rem" class="text-primary mb-1"></ion-icon>
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight: 500;">Hadir</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 12px 12px !important; line-height: 0.8rem;">
+                            <span class="badge bg-danger"
+                                style="position: absolute; top: 2px; right: 2px; z-index: 999">10</span>
+                            <ion-icon name="newspaper" style="font-size: 1.6rem" class="text-success mb-1"></ion-icon>
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight: 500;">Izin</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 12px 12px !important; line-height: 0.8rem;">
+                            <span class="badge bg-danger"
+                                style="position: absolute; top: 2px; right: 2px; z-index: 999">10</span>
+                            <ion-icon name="medkit" style="font-size: 1.6rem" class="text-warning mb-1"></ion-icon>
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight: 500;">Sakit</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 12px 12px !important; line-height: 0.8rem;">
+                            <span class="badge bg-danger"
+                                style="position: absolute; top: 2px; right: 2px; z-index: 999">10</span>
+                            <ion-icon name="alarm" style="font-size: 1.6rem" class="text-danger mb-1"></ion-icon>
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight: 500;">Telat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="presencetab mt-2">
             <div class="tab-pane fade show active" id="pilled" role="tabpanel">
                 <ul class="nav nav-tabs style1" role="tablist">
