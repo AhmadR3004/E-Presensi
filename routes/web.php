@@ -39,6 +39,9 @@ Route::post('/presensi/store', [PresensiController::class, 'store']);
 Route::get('/editProfile', [PresensiController::class, 'editProfile']);
 Route::post('/presensi/{nip}/updateProfile', [PresensiController::class, 'updateProfile']);
 
+Route::get('/presensi/histori', [PresensiController::class, 'histori']);
+Route::post('/gethistori', [PresensiController::class, 'gethistori']);
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');

@@ -174,4 +174,26 @@ class PresensiController extends Controller
             return Redirect::back()->with(['error' => 'Data gagal diupdate']);
         }
     }
+
+    public function histori()
+    {
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        return view('presensi.histori', compact('namabulan'));
+    }
+
+    public function gethistori(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $nip = Auth::guard('pegawai')->user()->nip;
+        
+        $histori = DB::table('presensi')
+        ->whereRaw('MONTH(tgl_presensi) ="'. $bulan . '"')
+        ->whereRaw('YEAR(tgl_presensi) ="'. $tahun . '"')
+        ->where('pegawai_id', $nip)
+        ->orderBy('tgl_presensi')
+        ->get();
+
+        return view('presensi.gethistori', compact('histori'));
+    }
 }
