@@ -3,11 +3,12 @@
     <div class="section" id="user-section">
         <div id="user-detail">
             <div class="avatar">
-                <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
+                <img src="{{ $pegawai->foto ? asset('storage/' . $pegawai->foto) : asset('default.jpg') }}" alt="avatar"
+                    class="imaged w64 rounded">
             </div>
             <div id="user-info">
-                <h2 id="user-name">Ahmad Rosyad</h2>
-                <span id="user-role">Head of IT</span>
+                <h2 id="user-name">{{ Auth::guard('pegawai')->user()->nama }}</h2>
+                <span id="user-role">{{ Auth::guard('pegawai')->user()->jabatan->nama_jabatan }}</span>
             </div>
         </div>
     </div>
@@ -77,7 +78,7 @@
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
                                 </div>
-                                <div class="presencedetail" style="margin-left: 1px">
+                                <div class="presencedetail">
                                     <h4 class="presencetitle">Masuk</h4>
                                     <span>{{ $presensihariini != null ? \Carbon\Carbon::parse($presensihariini->jam_in)->format('H:i') : 'Belum Absen' }}</span>
                                 </div>
@@ -99,7 +100,7 @@
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
                                 </div>
-                                <div class="presencedetail" style="margin-left: 1px">
+                                <div class="presencedetail">
                                     <h4 class="presencetitle">Pulang</h4>
                                     <span>{{ $presensihariini != null && $presensihariini->jam_out != null ? \Carbon\Carbon::parse($presensihariini->jam_out)->format('H:i') : 'Belum Absen' }}</span>
                                 </div>
@@ -118,7 +119,7 @@
                     <div class="card">
                         <div class="card-body text-center" style="padding: 12px 12px !important; line-height: 0.8rem;">
                             <span class="badge bg-danger"
-                                style="position: absolute; top: 2px; right: 2px; z-index: 999">10</span>
+                                style="position: absolute; top: 2px; right: 2px; z-index: 999">{{ $rekapPresensi->jmlhadir }}</span>
                             <ion-icon name="accessibility" style="font-size: 1.6rem" class="text-primary mb-1"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem; font-weight: 500;">Hadir</span>
@@ -151,7 +152,7 @@
                     <div class="card">
                         <div class="card-body text-center" style="padding: 12px 12px !important; line-height: 0.8rem;">
                             <span class="badge bg-danger"
-                                style="position: absolute; top: 2px; right: 2px; z-index: 999">10</span>
+                                style="position: absolute; top: 2px; right: 2px; z-index: 999">{{ $rekapPresensi->jmlterlambat }}</span>
                             <ion-icon name="alarm" style="font-size: 1.6rem" class="text-danger mb-1"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem; font-weight: 500;">Telat</span>
@@ -197,51 +198,25 @@
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel">
                     <ul class="listview image-listview">
-                        <li>
-                            <div class="item">
-                                <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
-                                <div class="in">
-                                    <div>Edward Lindgren</div>
-                                    <span class="text-muted">Designer</span>
+                        @foreach ($leaderboard as $d)
+                            <li>
+                                <div class="item">
+                                    <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
+                                    <div class="in">
+                                        <div>
+                                            <b>{{ $d->nama }}</b>
+                                            <br>
+                                            <small class="text-muted">{{ $d->nama_jabatan }}</small>
+                                        </div>
+                                        <span class="badge {{ $d->jam_in < '09:00' ? 'badge-success' : 'badge-danger' }}">
+                                            {{ $d->jam_in }}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
-                                <div class="in">
-                                    <div>Emelda Scandroot</div>
-                                    <span class="badge badge-primary">3</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
-                                <div class="in">
-                                    <div>Henry Bove</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
-                                <div class="in">
-                                    <div>Henry Bove</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
-                                <div class="in">
-                                    <div>Henry Bove</div>
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
-
             </div>
         </div>
     </div>
