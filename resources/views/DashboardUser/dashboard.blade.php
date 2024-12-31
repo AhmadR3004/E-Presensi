@@ -24,7 +24,7 @@
         <div class="fab-button"
             style="position: fixed !important; right: 20px !important; top: 45px !important; z-index: 9999 !important;">
             <a href="javascript:void(0);" class="fab" id="logout-button"
-                style="background-color: transparent !important; color: white !important; border-radius: 9999px !important; padding: 0.5rem !important; box-shadow: 3px 4px 6px rgb(0, 0, 0) !important;">
+                style="background-color: transparent !important; color: white !important; border-radius: 9999px !important; padding: 0.5rem !important; box-shadow: 3px 4px 6px rgb(0, 0, 0, 0.6) !important;">
                 <ion-icon name="exit" class="text-xl"></ion-icon>
             </a>
         </div>
