@@ -4,7 +4,7 @@
     </div>
 @endif
 @foreach ($histori as $d)
-    <ul class="listview image-listview mt-1">
+    <ul class="listview image-listview">
         <li>
             <div class="item">
                 @php
