@@ -186,14 +186,49 @@ class PresensiController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
         $nip = Auth::guard('pegawai')->user()->nip;
-        
+
         $histori = DB::table('presensi')
-        ->whereRaw('MONTH(tgl_presensi) ="'. $bulan . '"')
-        ->whereRaw('YEAR(tgl_presensi) ="'. $tahun . '"')
-        ->where('pegawai_id', $nip)
-        ->orderBy('tgl_presensi')
-        ->get();
+            ->whereRaw('MONTH(tgl_presensi) ="' . $bulan . '"')
+            ->whereRaw('YEAR(tgl_presensi) ="' . $tahun . '"')
+            ->where('pegawai_id', $nip)
+            ->orderBy('tgl_presensi')
+            ->get();
 
         return view('presensi.gethistori', compact('histori'));
+    }
+
+    public function izinSakit()
+    {
+        return view('presensi.izinSakit');
+    }
+
+    public function createIzin()
+    {
+        return view('presensi.createIzin');
+    }
+
+    public function storeIzin(Request $request)
+    {
+        $nip = Auth::guard('pegawai')->user()->nip;
+        $tgl_izin = $request->tgl_izin;
+        $status = $request->status;
+        $keterangan = $request->keterangan;
+
+        $data = [
+            'pegawai_id' => $nip,
+            'tgl_izin' => $tgl_izin,
+            'status' => $status,
+            'keterangan' => $keterangan,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        $simpan = DB::table('izinSakit')->insert($data);
+
+        if ($simpan) {
+            return redirect('/presensi/izinSakit')->with(['success' => 'Data berhasil disimpan!']);
+        } else {
+            return redirect('/presensi/izinSakit')->with(['error' => 'Data gagal disimpan!']);
+        }
     }
 }

@@ -5,11 +5,11 @@
             <strong>Home</strong>
         </div>
     </a>
-    <a href="/presensi/histori" class="item {{ request()->is('presensi/histori') ? 'active' : '' }}">
+    <a href="/presensi/izinSakit"
+        class="item {{ request()->is('presensi/izinSakit', 'presensi/createIzin') ? 'active' : '' }}">
         <div class="col">
-            <ion-icon name="document-text-outline" role="img" class="md hydrated"
-                aria-label="document text outline"></ion-icon>
-            <strong>Histori</strong>
+            <ion-icon name="calendar-outline"></ion-icon>
+            <strong>Izin / Sakit</strong>
         </div>
     </a>
     <a href="/presensi/create" class="item">
@@ -19,11 +19,10 @@
             </div>
         </div>
     </a>
-    <a href="#" class="item {{ request()->is('izin') ? 'active' : '' }}">
+    <a href="/presensi/histori" class="item {{ request()->is('presensi/histori') ? 'active' : '' }}">
         <div class="col">
-            <ion-icon name="document-text-outline" role="img" class="md hydrated"
-                aria-label="document text outline"></ion-icon>
-            <strong>Izin</strong>
+            <ion-icon name="document-text-outline" role="img" class="md hydrated" aria-label="document"></ion-icon>
+            <strong>Histori</strong>
         </div>
     </a>
     <a href="/editProfile" class="item {{ request()->is('editProfile') ? 'active' : '' }}">
