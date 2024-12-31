@@ -13,7 +13,7 @@
     <!-- * App Header -->
 @endsection
 @section('content')
-    <div class="row" style="margin-top: 4rem;">
+    <div class="row" style="margin-top: 4rem; margin-bottom: 5px;">
         <div class="col">
             @php
                 $messagesuccess = Session::get('success');
