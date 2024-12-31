@@ -1,4 +1,16 @@
 <x-app-layout>
+    {{-- Cek jika ada variabel data dan tampilkan alert --}}
+    @if (isset($data))
+        @if ($data['status'] == 'success')
+            <div class="alert alert-success">
+                {{ $data['message'] }}
+            </div>
+        @elseif ($data['status'] == 'error')
+            <div class="alert alert-danger">
+                {{ $data['message'] }}
+            </div>
+        @endif
+    @endif
 
     <div class="py-4">
         <div class="max-w-12xl mx-auto sm:px-6 lg:px-8">
@@ -235,4 +247,27 @@
             document.getElementById('deletePegawaiForm').action = `/pegawai/${id}`;
         }
     </script>
+    <script>
+        document.getElementById('nip').addEventListener('input', function() {
+            let nip = this.value;
+            let alertBadge = document.getElementById('nip-alert');
+
+            // Only check if the NIP is not empty
+            if (nip.length > 0) {
+                fetch('/check-nip/' + nip)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            alertBadge.classList.remove('hidden');
+                        } else {
+                            alertBadge.classList.add('hidden');
+                        }
+                    })
+                    .catch(error => console.error('Error checking NIP:', error));
+            } else {
+                alertBadge.classList.add('hidden');
+            }
+        });
+    </script>
+
 </x-app-layout>

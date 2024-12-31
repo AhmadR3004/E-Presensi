@@ -49,6 +49,11 @@ class DashboardUserController extends Controller
 
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
+        $rekapizin = DB::table("izinsakit")
+            ->selectRaw('SUM(IF(status = "i",1,0)) as jmlizin, SUM(IF(status = "s",1,0)) as jmlizin')
+            ->where('pegawai_id', $nip)
+            ->get();
+
         return view('DashboardUser.dashboard', compact('pegawai', 'presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini', 'rekapPresensi', 'leaderboard'));
     }
 }

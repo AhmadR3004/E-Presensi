@@ -39,39 +39,48 @@ class PegawaiController extends Controller
         $request->validate([
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nama' => 'required|string',
-            'nip' => 'required|string|unique:pegawai',
+            'nip' => 'required|string|unique:pegawai,nip',
             'jabatan_id' => 'required|exists:jabatan,id',
             'alamat' => 'required|string',
-            'no_telp' => 'required|string',
+            'no_telp' => 'required|string|unique:pegawais,no_telp',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
             'tanggal_masuk' => 'required|date',
-            'email' => 'required|string|email|unique:pegawai',
+            'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
 
-        // Ambil nip dari request yang dikirimkan di form
-        $nip = $data['nip'];
-
-        // Cek jika ada foto, dan simpan di folder yang sama dalam public storage
+        // Process and save the data
         if ($request->hasFile('foto')) {
-            // Membuat nama file berdasarkan NIP dan ekstensi foto
-            $fotoName = $nip . '.' . $request->file('foto')->getClientOriginalExtension();
-
-            // Menyimpan foto ke folder public storage dan mengambil nama file saja
+            $fotoName = $data['nip'] . '.' . $request->file('foto')->getClientOriginalExtension();
             $request->file('foto')->storeAs('uploads/pegawai', $fotoName, 'public');
-
-            // Menyimpan nama file foto (tanpa path) ke dalam database
-            $data['foto'] = $fotoName; // Menyimpan hanya nama file tanpa path
+            $data['foto'] = $fotoName;
         }
 
-        // Simpan pegawai ke database
         Pegawai::create($data);
 
         return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil ditambahkan');
+    }
+
+    public function checkNip($nip)
+    {
+        // Periksa apakah NIP sudah ada di database
+        $exists = Pegawai::where('nip', $nip)->exists();
+
+        // Kembalikan response JSON
+        return response()->json(['exists' => $exists]);
+    }
+
+    public function checkWa($no_telp)
+    {
+        // Periksa apakah no_telp sudah ada di database
+        $exists = Pegawai::where('no_telp', $no_telp)->exists();
+
+        // Kembalikan response JSON
+        return response()->json(['exists' => $exists]);
     }
 
     public function show($id)

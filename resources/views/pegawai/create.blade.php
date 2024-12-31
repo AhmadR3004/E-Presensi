@@ -32,9 +32,15 @@
                     <div>
                         <label for="nip"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIP</label>
-                        <input type="text" name="nip" id="nip"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="NIP Pegawai" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        <div class="relative">
+                            <input type="text" name="nip" id="nip"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                placeholder="NIP Pegawai" required oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                                autocomplete="off">
+                            <small id="nip-alert"
+                                class="text-red-500 absolute right-2 top-1/2 transform -translate-y-1/2 hidden">NIP
+                                sudah ada!</small>
+                        </div>
                     </div>
                     <div>
                         <label for="jabatan_id"
@@ -58,9 +64,15 @@
                     <div>
                         <label for="no_telp" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No
                             WhatsApp</label>
-                        <input type="text" name="no_telp" id="no_telp"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="No Wa Pegawai" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        <div class="relative">
+                            <input type="text" name="no_telp" id="no_telp"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                placeholder="No WA Pegawai" required
+                                oninput="this.value=this.value.replace(/[^0-9]/g,'')" autocomplete="off">
+                            <small id="wa-alert"
+                                class="text-red-500 absolute right-2 top-1/2 transform -translate-y-1/2 hidden">No
+                                WhatsApp sudah ada!</small>
+                        </div>
                     </div>
                     <div>
                         <label for="tanggal_lahir"
@@ -126,3 +138,54 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('nip').addEventListener('blur', function() {
+        let nip = this.value; // Ambil nilai NIP dari input
+        let alertText = document.getElementById('nip-alert'); // Ambil elemen alert
+
+        // Reset pesan peringatan
+        alertText.classList.add('hidden');
+
+        // Lakukan pengecekan hanya jika NIP tidak kosong
+        if (nip.length > 0) {
+            fetch('/check-nip/' + nip) // Ganti URL sesuai endpoint untuk pengecekan
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        // Jika NIP sudah ada, tampilkan pesan peringatan
+                        alertText.classList.remove('hidden');
+                    } else {
+                        // Jika NIP tidak ada, sembunyikan pesan peringatan
+                        alertText.classList.add('hidden');
+                    }
+                })
+                .catch(error => console.error('Error checking NIP:', error));
+        }
+    });
+</script>
+<script>
+    document.getElementById('no_telp').addEventListener('blur', function() {
+        let noWa = this.value; // Ambil nilai no_telp dari input
+        let alertText = document.getElementById('wa-alert'); // Ambil elemen alert
+
+        // Reset pesan peringatan
+        alertText.classList.add('hidden');
+
+        // Lakukan pengecekan hanya jika no_telp tidak kosong
+        if (noWa.length > 0) {
+            fetch('/check-wa/' + noWa) // Ganti URL sesuai endpoint untuk pengecekan no_telp
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        // Jika no_telp sudah ada, tampilkan pesan peringatan
+                        alertText.classList.remove('hidden');
+                    } else {
+                        // Jika no_telp tidak ada, sembunyikan pesan peringatan
+                        alertText.classList.add('hidden');
+                    }
+                })
+                .catch(error => console.error('Error checking no_telp:', error));
+        }
+    });
+</script>
