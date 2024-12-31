@@ -1,7 +1,7 @@
 @extends('layouts.presensi')
 @section('content')
     <div class="section" id="user-section">
-        <div id="user-detail">
+        <div id="user-detail" style="display: flex !important; align-items: center !important; gap: 8px !important;">
             <div class="avatar">
                 @if (Auth::guard('pegawai')->user()->foto)
                     @php
@@ -12,12 +12,45 @@
                     <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
                 @endif
             </div>
-            <div id="user-info">
-                <h2 id="user-name">{{ Auth::guard('pegawai')->user()->nama }}</h2>
-                <span id="user-role">{{ Auth::guard('pegawai')->user()->jabatan->nama_jabatan }}</span>
+            <div id="user-info" style="margin-left: 8px !important;">
+                <h2 id="user-name" style="font-size: 1.25rem !important; font-weight: bold !important;">
+                    {{ Auth::guard('pegawai')->user()->nama }}</h2>
+                <span id="user-role"
+                    style="font-size: 0.875rem !important; color: #d1d5db !important;">{{ Auth::guard('pegawai')->user()->jabatan->nama_jabatan }}</span>
             </div>
         </div>
+
+        <!-- Tombol Logout di ujung atas kanan dengan style dan !important -->
+        <div class="fab-button"
+            style="position: fixed !important; right: 20px !important; top: 45px !important; z-index: 9999 !important;">
+            <a href="javascript:void(0);" class="fab" id="logout-button"
+                style="background-color: transparent !important; color: white !important; border-radius: 9999px !important; padding: 0.5rem !important; box-shadow: 3px 4px 6px rgb(0, 0, 0) !important;">
+                <ion-icon name="exit" class="text-xl"></ion-icon>
+            </a>
+        </div>
     </div>
+
+    <!-- Tambahkan SweetAlert2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan logout dari akun ini.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, logout!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect ke halaman logout jika dikonfirmasi
+                    window.location.href = '/prosesLogout';
+                }
+            });
+        });
+    </script>
 
     <div class="section" id="menu-section">
         <div class="card">
@@ -177,7 +210,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                            Rank Today
+                            Rank hari ini
                         </a>
                     </li>
                 </ul>

@@ -54,7 +54,7 @@ class DashboardUserController extends Controller
             ->where('pegawai_id', $nip)
             ->whereRaw('MONTH(tgl_izin) = "' . $bulanini . '"')
             ->whereRaw('YEAR(tgl_izin) = "' . $tahunini . '"')
-            ->where('status_approved',)
+            ->where('status_approved', 1)
             ->first();
 
         return view('DashboardUser.dashboard', compact('pegawai', 'presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini', 'rekapPresensi', 'leaderboard', 'rekapizin'));

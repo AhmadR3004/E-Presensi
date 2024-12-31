@@ -15,13 +15,21 @@ class PegawaiController extends Controller
         // Membuat query untuk model Pegawai
         $query = Pegawai::with('jabatan')->orderBy('created_at', 'desc');
 
-        // Cek apakah ada parameter pencarian
+        // Cek apakah ada parameter pencarian untuk 'search' dan 'jabatan_id'
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
 
             // Menambahkan kondisi pencarian untuk 'nama' dan 'nip'
             $query->where('nama', 'like', '%' . $search . '%')
                 ->orWhere('nip', 'like', '%' . $search . '%');
+        }
+
+        // Cek jika ada 'jabatan_id' dan tambahkan filter pencarian berdasarkan jabatan
+        if ($request->has('jabatan_id') && $request->jabatan_id != '') {
+            $jabatanId = $request->jabatan_id;
+
+            // Menambahkan kondisi pencarian untuk 'jabatan_id'
+            $query->where('jabatan_id', $jabatanId);
         }
 
         // Melakukan paginate pada hasil query dengan 10 data per halaman

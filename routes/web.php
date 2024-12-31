@@ -25,6 +25,10 @@ Route::get('/login-user', function () {
     return view('auth.login-user'); // This will load the view from resources/views/auth/login-user.blade.php
 })->name('login-user');
 
+Route::get('/', function () {
+    return view('auth.login-user');
+})->name('login-user');
+
 // Route to process the login
 Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
 
