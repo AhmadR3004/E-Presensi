@@ -25,7 +25,7 @@
                 <div class="list-menu">
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="green" style="font-size: 40px;">
+                            <a href="/editProfile" class="green" style="font-size: 40px;">
                                 <ion-icon name="person-sharp"></ion-icon>
                             </a>
                         </div>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="danger" style="font-size: 40px;">
+                            <a href="/presensi/izinSakit" class="danger" style="font-size: 40px;">
                                 <ion-icon name="calendar-number"></ion-icon>
                             </a>
                         </div>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="warning" style="font-size: 40px;">
+                            <a href="/presensi/histori" class="warning" style="font-size: 40px;">
                                 <ion-icon name="document-text"></ion-icon>
                             </a>
                         </div>
@@ -208,10 +208,9 @@
                             <li>
                                 <div class="item">
                                     @php
-                                        $path = Storage::url('uploads/pegawai/' . $d->foto_in);
+                                        $path = Storage::url('uploads/absensi/' . $d->foto_in);
                                     @endphp
                                     <img src="{{ url($path) }}" alt="image" class="image">
-                                    <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
                                     <div class="in">
                                         <div>
                                             <b>{{ $d->nama }}</b>
