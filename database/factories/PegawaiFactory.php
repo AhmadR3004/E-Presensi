@@ -26,7 +26,7 @@ class PegawaiFactory extends Factory
             'jenis_kelamin' => $faker->randomElement(['L', 'P']),
             'tanggal_masuk' => $faker->date,
             'email' => $faker->unique()->safeEmail,
-            'password' => bcrypt('password'),
+            'password' => bcrypt('123'),  // Password is now "123"
         ];
     }
 }
