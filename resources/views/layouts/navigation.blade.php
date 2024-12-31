@@ -14,17 +14,17 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        <b>{{ __('Dashboard') }}</b>
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('pegawai.index')" :active="request()->routeIs('pegawai.index')">
-                        {{ __('Pegawai') }}
+                        <b>{{ __('Pegawai') }}</b>
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('jabatan.index')" :active="request()->routeIs('jabatan.index')">
-                        {{ __('Jabatan') }}
+                        <b>{{ __('Jabatan') }}</b>
                     </x-nav-link>
                 </div>
             </div>

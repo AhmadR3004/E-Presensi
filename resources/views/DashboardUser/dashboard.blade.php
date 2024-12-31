@@ -177,7 +177,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                            Leaderboard
+                            Rank Today
                         </a>
                     </li>
                 </ul>

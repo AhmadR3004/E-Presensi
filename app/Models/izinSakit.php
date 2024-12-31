@@ -12,4 +12,12 @@ class IzinSakit extends Model
     protected $table = 'izinSakit';
     protected $fillable = ['pegawai_id', 'tgl_izin', 'status', 'keterangan'];
     public $timestamps = true; // Aktifkan timestamps otomatis
+
+    /**
+     * Relasi ke model Pegawai.
+     */
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class);
+    }
 }
