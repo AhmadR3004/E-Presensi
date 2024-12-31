@@ -1,5 +1,5 @@
 <div id="createJabatanModal" tabindex="-1" aria-hidden="true"
-    class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 justify-center items-center flex w-full h-full backdrop-blur-sm !important">
+    class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 justify-center items-center flex w-full h-full bg-black bg-opacity-50">
     <div class="relative p-4 w-full max-w-3xl h-full md:h-auto">
         <!-- Modal content -->
         <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-900 sm:p-5">
@@ -24,11 +24,15 @@
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
                         <label for="nama_jabatan"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
-                            Jabatan</label>
-                        <input type="text" name="nama_jabatan" id="nama_jabatan"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="Nama Jabatan" required>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Jabatan</label>
+                        <div class="relative">
+                            <input type="text" name="nama_jabatan" id="nama_jabatan"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                placeholder="Nama Jabatan" required>
+                            <small id="jabatan-alert"
+                                class="text-red-500 absolute right-2 top-1/2 transform -translate-y-1/2 hidden">
+                                Nama jabatan sudah ada!</small>
+                        </div>
                     </div>
                     <div>
                         <label for="deskripsi"
@@ -57,3 +61,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('nama_jabatan').addEventListener('blur', function() {
+        let namaJabatan = this.value; // Ambil nilai input nama_jabatan
+        let alertText = document.getElementById('jabatan-alert'); // Ambil elemen alert
+
+        // Reset pesan peringatan
+        alertText.classList.add('hidden');
+
+        // Lakukan pengecekan hanya jika nama_jabatan tidak kosong
+        if (namaJabatan.length > 0) {
+            fetch('/check-jabatan/' + namaJabatan) // Ganti URL sesuai endpoint pengecekan nama_jabatan
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        // Jika nama_jabatan sudah ada, tampilkan pesan peringatan
+                        alertText.classList.remove('hidden');
+                    } else {
+                        // Jika nama_jabatan tidak ada, sembunyikan pesan peringatan
+                        alertText.classList.add('hidden');
+                    }
+                })
+                .catch(error => console.error('Error checking nama_jabatan:', error));
+        }
+    });
+</script>

@@ -42,7 +42,7 @@ class PegawaiController extends Controller
             'nip' => 'required|string|unique:pegawai,nip',
             'jabatan_id' => 'required|exists:jabatan,id',
             'alamat' => 'required|string',
-            'no_telp' => 'required|string|unique:pegawais,no_telp',
+            'no_telp' => 'required|string|unique:pegawai,no_telp',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
             'tanggal_masuk' => 'required|date',

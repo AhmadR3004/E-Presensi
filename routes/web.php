@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/check-wa/{no_telp}', [PegawaiController::class, 'checkWa']);
 
     Route::resource('jabatan', JabatanController::class);
+    Route::get('/check-jabatan/{nama_jabatan}', [JabatanController::class, 'checkJabatan']);
 });
 
 require __DIR__ . '/auth.php';

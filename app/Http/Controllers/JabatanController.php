@@ -20,12 +20,21 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_jabatan' => 'required|string|max:100',
+            'nama_jabatan' => 'required|string|unique:jabatans,nama_jabatan',
             'deskripsi' => 'nullable|string'
         ]);
 
         Jabatan::create($request->all());
         return redirect()->route('jabatan.index')->with('success', 'Jabatan berhasil ditambahkan');
+    }
+
+    public function checkJabatan($nama_jabatan)
+    {
+        // Periksa apakah nama_jabatan sudah ada di database
+        $exists = Jabatan::where('nama_jabatan', $nama_jabatan)->exists();
+
+        // Kembalikan response JSON
+        return response()->json(['exists' => $exists]);
     }
 
     public function edit($id)
