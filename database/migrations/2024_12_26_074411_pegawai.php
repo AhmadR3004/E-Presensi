@@ -9,10 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pegawai', function (Blueprint $table) {
-            $table->id();
+            $table->string('nip')->primary(); // Menjadikan nip sebagai primary key
             $table->string('foto')->nullable();
             $table->string('nama');
-            $table->string('nip')->unique();
             $table->foreignId('jabatan_id')
                 ->constrained('jabatan')
                 ->cascadeOnUpdate();

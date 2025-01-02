@@ -17,7 +17,7 @@ class DashboardUserController extends Controller
 
         $pegawai = DB::table('pegawai')
             ->select('foto')
-            ->where('id', Auth::guard('pegawai')->id())
+            ->where('nip', Auth::guard('pegawai')->id())
             ->first();
 
         $presensihariini = DB::table('presensi')
@@ -49,7 +49,7 @@ class DashboardUserController extends Controller
 
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
-        $rekapizin = DB::table("izinsakit")
+        $rekapizin = DB::table('izin_sakit')
             ->selectRaw('SUM(IF(status = "i",1,0)) as jmlizin, SUM(IF(status = "s",1,0)) as jmlsakit')
             ->where('pegawai_id', $nip)
             ->whereRaw('MONTH(tgl_izin) = "' . $bulanini . '"')

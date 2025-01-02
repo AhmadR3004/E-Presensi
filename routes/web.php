@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PresensiController;
+use App\Models\Presensi;
 
 /*
 |-------------------------------------------------------------------------- 
@@ -54,6 +55,7 @@ Route::middleware('auth:pegawai')->group(function () {
     Route::get('/presensi/izinSakit', [PresensiController::class, 'izinSakit']);
     Route::get('/presensi/createIzin', [PresensiController::class, 'CreateIzin']);
     Route::post('/presensi/storeIzin', [PresensiController::class, 'storeIzin']);
+    Route::delete('/presensi/izinsakit/{id}', [PresensiController::class, 'destroy'])->name('dataizin.destroy');
 });
 
 // General routes for authenticated users (using default "web" guard)

@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('presensi', function (Blueprint $table) {
-            $table->id();
-            // Foreign key nik pegawai
-            $table->foreignId('pegawai_id')
-                ->constrained('pegawai') // Referensi ke tabel pegawai
-                ->cascadeOnUpdate(); // Update otomatis jika ID pegawai berubah
+            $table->id(); // Primary key auto-increment
+            $table->string('pegawai_id'); // Foreign key ke tabel pegawai (menggunakan nip)
+            $table->foreign('pegawai_id') // Definisi foreign key
+                ->references('nip') // Referensi ke kolom 'nip' di tabel pegawai
+                ->on('pegawai') // Nama tabel referensi
+                ->cascadeOnUpdate() // Update otomatis jika NIP pegawai berubah
+                ->cascadeOnDelete(); // Hapus otomatis jika pegawai dihapus
             $table->date('tgl_presensi'); // Tanggal presensi
             $table->time('jam_in')->nullable(); // Waktu jam masuk
             $table->time('jam_out')->nullable(); // Waktu jam keluar

@@ -43,7 +43,7 @@
                 <ul class="listview image-listview">
                     <li>
                         <div class="item">
-                            <div class="in">
+                            <div class="in d-flex justify-content-between">
                                 <div>
                                     <b>{{ \Carbon\Carbon::parse($d->tgl_izin)->translatedFormat('d F Y') }}
                                         ({{ $d->status == 's' ? 'Sakit' : 'Izin' }})
@@ -51,13 +51,24 @@
                                     <br>
                                     <small class="text-muted">{{ $d->keterangan }}</small>
                                 </div>
-                                @if ($d->status_approved == 0)
-                                    <span class="badge bg-warning">Waiting</span>
-                                @elseif($d->status_approved == 1)
-                                    <span class="badge bg-success">Approved</span>
-                                @elseif($d->status_approved == 2)
-                                    <span class="badge bg-danger">Decline</span>
-                                @endif
+                                <div class="d-flex align-items-center">
+                                    @if ($d->status_approved == 0)
+                                        <span class="badge bg-warning me-2">Waiting</span>
+                                        <!-- Tombol Hapus dengan logo Ionicons -->
+                                        <form action="{{ route('dataizin.destroy', $d->id) }}" method="POST"
+                                            style="display: inline-block;" class="delete-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link text-danger p-0">
+                                                <ion-icon name="trash-outline"></ion-icon> <!-- Ikon Ionicons -->
+                                            </button>
+                                        </form>
+                                    @elseif($d->status_approved == 1)
+                                        <span class="badge bg-success">Approved</span>
+                                    @elseif($d->status_approved == 2)
+                                        <span class="badge bg-danger">Decline</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </li>
@@ -72,3 +83,32 @@
         </a>
     </div>
 @endsection
+
+@push('myscript')
+    <script>
+        // Tambahkan event listener untuk setiap form penghapusan
+        document.querySelectorAll('.delete-form').forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Mencegah form langsung submit
+
+                // Menampilkan SweetAlert konfirmasi
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data izin ini akan dihapus!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Ya, Hapus!',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Jika konfirmasi, kirim form untuk menghapus data
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

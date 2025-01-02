@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Presensi;
-use App\Models\IzinSakit; // Model IzinSakit
+use App\Models\Izin_Sakit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,13 +29,13 @@ class DashboardController extends Controller
             ->count();
 
         // Get Pegawai who are absent due to izin
-        $izin = IzinSakit::where('tgl_izin', $today)
+        $izin = Izin_Sakit::where('tgl_izin', $today)
             ->where('status', 'I') // 'I' for izin
             ->where('status_approved', 1) // Only approved izin
             ->count();
 
         // Get Pegawai who are absent due to sakit
-        $sakit = IzinSakit::where('tgl_izin', $today)
+        $sakit = Izin_Sakit::where('tgl_izin', $today)
             ->where('status', 'S') // 'S' for sakit
             ->where('status_approved', 1) // Only approved sakit
             ->count();

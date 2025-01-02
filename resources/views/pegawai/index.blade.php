@@ -133,7 +133,7 @@
                                                     <button type="button"
                                                         class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                                                         data-modal-toggle="editPegawaiModal"
-                                                        onclick="openEditModal({{ $pegawai->id }})">
+                                                        onclick="openEditModal({{ $pegawai->nip }})">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
@@ -160,7 +160,7 @@
                                                     <button type="button"
                                                         class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
                                                         data-modal-toggle="deletePegawaiModal"
-                                                        onclick="openDeleteModal({{ $pegawai->id }})">
+                                                        onclick="openDeleteModal({{ $pegawai->nip }})">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
@@ -220,32 +220,35 @@
         });
     </script>
     <script>
-        function openEditModal(id) {
-            fetch(`/pegawai/${id}/edit`)
+        function openEditModal(nip) {
+            fetch(`/pegawai/${nip}/edit`) // Gantilah id dengan nip
                 .then(response => response.json())
                 .then(data => {
                     const pegawai = data.pegawai;
                     const jabatans = data.jabatans;
+
+                    // Isi data pegawai ke form edit
                     document.getElementById('edit_nama').value = pegawai.nama;
-                    document.getElementById('edit_nip').value = pegawai.nip;
+                    document.getElementById('edit_nip').value = pegawai.nip; // NIP tetap
                     document.getElementById('edit_alamat').value = pegawai.alamat;
                     document.getElementById('edit_no_telp').value = pegawai.no_telp;
                     document.getElementById('edit_tanggal_lahir').value = pegawai.tanggal_lahir;
                     document.getElementById('edit_jenis_kelamin').value = pegawai.jenis_kelamin;
                     document.getElementById('edit_tanggal_masuk').value = pegawai.tanggal_masuk;
                     document.getElementById('edit_email').value = pegawai.email;
-                    document.getElementById('edit_password').value = '';
-                    document.getElementById('edit_foto').value = '';
-                    document.getElementById('editPegawaiForm').action = `/pegawai/${id}`;
-                    // Populate jabatan dropdown
+                    document.getElementById('edit_password').value = ''; // Biarkan kosong
+                    document.getElementById('edit_foto').value = ''; // Biarkan kosong
+                    document.getElementById('editPegawaiForm').action = `/pegawai/${nip}`; // Ganti dengan nip
+
+                    // Populasi dropdown jabatan
                     const jabatanSelect = document.getElementById('edit_jabatan_id');
-                    jabatanSelect.innerHTML = ''; // Clear existing options
+                    jabatanSelect.innerHTML = ''; // Bersihkan opsi sebelumnya
                     jabatans.forEach(jabatan => {
                         const option = document.createElement('option');
                         option.value = jabatan.id;
                         option.text = jabatan.nama_jabatan;
                         if (jabatan.id === pegawai.jabatan_id) {
-                            option.selected = true;
+                            option.selected = true; // Pilih jabatan yang sesuai
                         }
                         jabatanSelect.appendChild(option);
                     });
@@ -269,31 +272,9 @@
         }
     </script>
     <script>
-        function openDeleteModal(id) {
-            document.getElementById('deletePegawaiForm').action = `/pegawai/${id}`;
+        function openDeleteModal(nip) {
+            document.getElementById('deletePegawaiForm').action = `/pegawai/${nip}`;
         }
-    </script>
-    <script>
-        document.getElementById('nip').addEventListener('input', function() {
-            let nip = this.value;
-            let alertBadge = document.getElementById('nip-alert');
-
-            // Only check if the NIP is not empty
-            if (nip.length > 0) {
-                fetch('/check-nip/' + nip)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.exists) {
-                            alertBadge.classList.remove('hidden');
-                        } else {
-                            alertBadge.classList.add('hidden');
-                        }
-                    })
-                    .catch(error => console.error('Error checking NIP:', error));
-            } else {
-                alertBadge.classList.add('hidden');
-            }
-        });
     </script>
 
 </x-app-layout>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Izin_Sakit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -126,7 +127,7 @@ class PresensiController extends Controller
 
     public function editProfile()
     {
-        $nip = Auth::guard('pegawai')->user()->id;
+        $nip = Auth::guard('pegawai')->user()->nip;
         $pegawai = DB::table('pegawai')->where('nip', $nip)->first();
 
         return view('presensi.editProfile', compact('pegawai'));
@@ -134,11 +135,11 @@ class PresensiController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $nip = Auth::guard('pegawai')->user()->id;
+        $nip = Auth::guard('pegawai')->user()->nip; // Menggunakan nip sebagai pengganti id
         $nama = $request->nama;
         $no_telp = $request->no_telp;
         $password = Hash::make($request->password);
-        $pegawai = DB::table('pegawai')->where('nip', $nip)->first();
+        $pegawai = DB::table('pegawai')->where('nip', $nip)->first(); // Ganti id menjadi nip
 
         if ($request->hasFile('foto')) {
             $foto = $nip . '.' . $request->file('foto')->getClientOriginalExtension();
@@ -163,7 +164,7 @@ class PresensiController extends Controller
             ];
         }
 
-        $update = DB::table('pegawai')->where('id', $nip)->update($data);
+        $update = DB::table('pegawai')->where('nip', $nip)->update($data); // Ganti id menjadi nip
         if ($update) {
             if ($request->hasFile('foto')) {
                 $folderpath = "public/uploads/pegawai/";
@@ -200,7 +201,7 @@ class PresensiController extends Controller
     public function izinSakit()
     {
         $nip = Auth::guard('pegawai')->user()->nip;
-        $dataizin = DB::table('izinSakit')->where('pegawai_id', $nip)->get();
+        $dataizin = DB::table('Izin_Sakit')->where('pegawai_id', $nip)->get();
         return view('presensi.izinSakit', compact('dataizin'));
     }
 
@@ -225,12 +226,22 @@ class PresensiController extends Controller
             'updated_at' => now(),
         ];
 
-        $simpan = DB::table('izinSakit')->insert($data);
+        $simpan = DB::table('Izin_Sakit')->insert($data);
 
         if ($simpan) {
             return redirect('/presensi/izinSakit')->with(['success' => 'Data berhasil disimpan!']);
         } else {
             return redirect('/presensi/izinSakit')->with(['error' => 'Data gagal disimpan!']);
         }
+    }
+
+    public function destroy($id)
+    {
+        $dataIzin = Izin_Sakit::findOrFail($id);
+
+        // Hapus data izin
+        $dataIzin->delete();
+
+        return redirect('/presensi/izinSakit')->with('success', 'Data izin berhasil dihapus.');
     }
 }

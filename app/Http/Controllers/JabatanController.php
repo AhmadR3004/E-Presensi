@@ -20,7 +20,7 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_jabatan' => 'required|string|unique:jabatans,nama_jabatan',
+            'nama_jabatan' => 'required|string|unique:jabatan,nama_jabatan',
             'deskripsi' => 'nullable|string'
         ]);
 

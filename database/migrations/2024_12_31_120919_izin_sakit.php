@@ -13,15 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('izinSakit', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->foreignId('pegawai_id') // Foreign key ke tabel pegawai
-                ->constrained('pegawai') // Referensi ke tabel pegawai
-                ->cascadeOnUpdate(); // Update otomatis jika ID pegawai berubah
+        Schema::create('izin_sakit', function (Blueprint $table) {
+            $table->id(); // Primary key auto-increment
+            $table->string('pegawai_id'); // Foreign key ke tabel pegawai (menggunakan nip)
+            $table->foreign('pegawai_id') // Definisi foreign key
+                ->references('nip') // Referensi ke kolom 'nip' di tabel pegawai
+                ->on('pegawai') // Tabel referensi
+                ->cascadeOnUpdate() // Update otomatis jika NIP pegawai berubah
+                ->cascadeOnDelete(); // Hapus otomatis jika data pegawai dihapus
             $table->date('tgl_izin'); // Kolom untuk tanggal izin
-            $table->char('status', 1) // Status izin (S untuk sakit, I untuk izin)
+            $table->char('status', 1) // Status izin (S: Sakit, I: Izin)
                 ->comment('S: Sakit, I: Izin');
-            $table->text('keterangan')->nullable(); // Kolom untuk keterangan, opsional
+            $table->text('keterangan')->nullable(); // Kolom untuk keterangan (opsional)
             $table->tinyInteger('status_approved') // Status persetujuan (0: Pending, 1: Disetujui, 2: Ditolak)
                 ->default(0)
                 ->comment('0: Pending, 1: Disetujui, 2: Ditolak');
@@ -36,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('izin');
+        Schema::dropIfExists('izin_sakit');
     }
 };

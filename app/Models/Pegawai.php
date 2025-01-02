@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -13,15 +11,17 @@ class Pegawai extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    public $incrementing = false; // Karena id bukan auto increment
-    protected $keyType = 'string'; // Karena id bertipe string
-    protected $primaryKey = 'id'; // Set primary key
-    protected $table = 'pegawai'; // Sesuaikan dengan nama tabel di database
+    // Primary key adalah 'nip'
+    protected $primaryKey = 'nip';
+    public $incrementing = false; // Karena primary key bukan auto increment
+    protected $keyType = 'string'; // Primary key bertipe string
+    protected $table = 'pegawai'; // Nama tabel di database
 
+    // Kolom-kolom yang dapat diisi secara massal
     protected $fillable = [
+        'nip',
         'foto',
         'nama',
-        'nip',
         'jabatan_id',
         'alamat',
         'no_telp',
@@ -32,28 +32,21 @@ class Pegawai extends Authenticatable
         'password'
     ];
 
+    // Kolom yang disembunyikan saat model dikonversi ke array atau JSON
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    // Casting kolom ke tipe data yang sesuai
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
+    // Relasi dengan model Jabatan
     public function jabatan()
     {
         return $this->belongsTo(Jabatan::class, 'jabatan_id');
-    }
-
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->id = $model->nip; // Set id sama dengan nip saat membuat record baru
-        });
     }
 }

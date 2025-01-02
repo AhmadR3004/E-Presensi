@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class PegawaiController extends Controller
 {
-
     public function index(Request $request)
     {
         // Membuat query untuk model Pegawai
@@ -47,9 +46,9 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'nip' => 'required|string|unique:pegawai,nip',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nama' => 'required|string',
-            'nip' => 'required|string|unique:pegawai,nip',
             'jabatan_id' => 'required|exists:jabatan,id',
             'alamat' => 'required|string',
             'no_telp' => 'required|string|unique:pegawai,no_telp',
@@ -77,10 +76,7 @@ class PegawaiController extends Controller
 
     public function checkNip($nip)
     {
-        // Periksa apakah NIP sudah ada di database
         $exists = Pegawai::where('nip', $nip)->exists();
-
-        // Kembalikan response JSON
         return response()->json(['exists' => $exists]);
     }
 
@@ -93,15 +89,17 @@ class PegawaiController extends Controller
         return response()->json(['exists' => $exists]);
     }
 
-    public function show($id)
+    public function show($nip)
     {
-        $pegawai = Pegawai::with('jabatan')->findOrFail($id);
+        // Gunakan NIP sebagai primary key
+        $pegawai = Pegawai::with('jabatan')->where('nip', $nip)->firstOrFail();
         return view('pegawai.show', compact('pegawai'));
     }
 
-    public function edit($id)
+    public function edit($nip)
     {
-        $pegawai = Pegawai::findOrFail($id);
+        // Gunakan NIP sebagai primary key
+        $pegawai = Pegawai::where('nip', $nip)->firstOrFail();
         $jabatans = Jabatan::all();
         return response()->json([
             'pegawai' => $pegawai,
@@ -109,62 +107,67 @@ class PegawaiController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $nip)
     {
+        // Validasi input dari form
         $request->validate([
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'nama' => 'required|string',
-            'nip' => 'required|string|unique:pegawai,nip,' . $id,
-            'jabatan_id' => 'required|exists:jabatan,id',
-            'alamat' => 'required|string',
-            'no_telp' => 'required|string',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:L,P',
-            'tanggal_masuk' => 'required|date',
-            'email' => 'required|string|email|unique:pegawai,email,' . $id,
-            'password' => 'nullable|string',
+            'nip' => 'required|string|unique:pegawai,nip,' . $nip . ',nip',  // Validasi NIP, kecuali untuk NIP yang sedang diupdate
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validasi file foto
+            'nama' => 'required|string',  // Validasi nama
+            'jabatan_id' => 'required|exists:jabatan,id',  // Validasi jabatan_id harus ada di tabel jabatan
+            'alamat' => 'required|string',  // Validasi alamat
+            'no_telp' => 'required|string|unique:pegawai,no_telp,' . $nip . ',nip',  // Validasi nomor telepon, kecuali untuk NIP yang sedang diupdate
+            'tanggal_lahir' => 'required|date',  // Validasi tanggal lahir
+            'jenis_kelamin' => 'required|in:L,P',  // Validasi jenis kelamin, L untuk laki-laki, P untuk perempuan
+            'tanggal_masuk' => 'required|date',  // Validasi tanggal masuk
+            'email' => 'required|string|email',  // Validasi email
+            'password' => 'nullable|string',  // Validasi password (opsional)
         ]);
 
-        $pegawai = Pegawai::findOrFail($id);
+        // Cari pegawai berdasarkan NIP
+        $pegawai = Pegawai::where('nip', $nip)->firstOrFail();
+
+        // Ambil semua data dari request
         $data = $request->all();
 
         // Cek dan update password jika diisi
         if ($request->filled('password')) {
-            $data['password'] = bcrypt($data['password']);
+            $data['password'] = bcrypt($data['password']);  // Enkripsi password jika diubah
         } else {
-            unset($data['password']);
+            unset($data['password']);  // Hapus password dari data jika tidak diubah
         }
 
-        // Cek jika ada foto baru, dan simpan di folder yang sama dalam public storage
+        // Cek jika ada foto baru yang diupload
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
             if ($pegawai->foto) {
-                Storage::disk('public')->delete('uploads/pegawai/' . $pegawai->foto);
+                Storage::disk('public')->delete('uploads/pegawai/' . $pegawai->foto);  // Hapus foto lama dari penyimpanan
             }
 
-            // Ambil nama file foto baru dengan nama berdasarkan NIP
-            $fotoName = $pegawai->nip . '.' . $request->file('foto')->getClientOriginalExtension();
+            // Ambil nama file foto baru berdasarkan NIP pegawai
+            $fotoName = $pegawai->nip . '.' . $request->file('foto')->getClientOriginalExtension();  // Nama file berdasarkan NIP
 
             // Simpan foto baru dan ambil nama file saja (tanpa path folder)
-            $request->file('foto')->storeAs('uploads/pegawai', $fotoName, 'public');
+            $request->file('foto')->storeAs('uploads/pegawai', $fotoName, 'public');  // Simpan di folder uploads/pegawai
 
-            // Simpan hanya nama file di database (tanpa path folder)
+            // Simpan nama file foto baru di database
             $data['foto'] = $fotoName;
         }
 
-        // Update data pegawai
+        // Update data pegawai dengan data baru
         $pegawai->update($data);
 
+        // Redirect dengan pesan sukses
         return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil diperbarui');
     }
 
-    public function destroy($id)
+    public function destroy($nip)
     {
-        $pegawai = Pegawai::findOrFail($id);
+        // Gunakan NIP sebagai primary key
+        $pegawai = Pegawai::where('nip', $nip)->firstOrFail();
 
         // Hapus file foto dari direktori public jika ada
         if ($pegawai->foto) {
-            // Menghapus file foto berdasarkan nama file (tanpa path folder)
             Storage::disk('public')->delete('uploads/pegawai/' . $pegawai->foto);
         }
 

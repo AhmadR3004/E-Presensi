@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IzinSakit extends Model
+class Izin_Sakit extends Model
 {
     use HasFactory;
 
-    protected $table = 'izinSakit';
+    protected $table = 'Izin_Sakit';
     protected $fillable = ['pegawai_id', 'tgl_izin', 'status', 'keterangan'];
     public $timestamps = true; // Aktifkan timestamps otomatis
 
