@@ -20,8 +20,10 @@ class PegawaiController extends Controller
             $search = $request->search;
 
             // Menambahkan kondisi pencarian untuk 'nama' dan 'nip'
-            $query->where('nama', 'like', '%' . $search . '%')
-                ->orWhere('nip', 'like', '%' . $search . '%');
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', '%' . $search . '%')
+                    ->orWhere('nip', 'like', '%' . $search . '%');
+            });
         }
 
         // Cek jika ada 'jabatan_id' dan tambahkan filter pencarian berdasarkan jabatan
