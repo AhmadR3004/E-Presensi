@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Presensi;
 use App\Models\Izin_Sakit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+
+use function Ramsey\Uuid\v1;
 
 class PresensiController extends Controller
 {
@@ -243,5 +247,56 @@ class PresensiController extends Controller
         $dataIzin->delete();
 
         return redirect('/presensi/izinSakit')->with('success', 'Data izin berhasil dihapus.');
+    }
+
+    public function monitoring(Request $request)
+    {
+        // Cek apakah ada parameter tanggal yang dipilih
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));  // Default ke tanggal hari ini jika tidak ada filter
+
+        // Ambil data presensi berdasarkan tanggal yang dipilih
+        $presensi = Presensi::whereDate('tgl_presensi', $date)  // Gantilah 'tgl_presensi' dengan kolom yang sesuai di tabel presensi
+            ->with('pegawai.jabatan')  // Memuat relasi pegawai dan jabatan
+            ->get();
+
+        return view('presensi.monitoring', compact('presensi', 'date'));
+    }
+
+    public function laporanPresensi()
+    {
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $pegawai = DB::table('pegawai')->orderBy('nama')->get();
+        return view('laporan.presensi', compact('namabulan', 'pegawai'));
+    }
+
+    public function cetakPresensi(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $nip = $request->nip;
+
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        $pegawai = DB::table('pegawai')->where('nip', $nip)
+            ->select('nama', 'jabatan_id', 'no_telp', 'foto')
+            ->first();
+
+        $jabatan = DB::table('jabatan')->where('id', $pegawai->jabatan_id)
+            ->select('nama_jabatan')
+            ->first();
+
+        $presensi = DB::table('presensi')
+            ->where('pegawai_id', $nip)
+            ->whereRaw('MONTH(tgl_presensi) ="' . $bulan . '"')
+            ->whereRaw('YEAR(tgl_presensi) ="' . $tahun . '"')
+            ->orderBy('tgl_presensi')
+            ->get();
+
+        return view('laporan.cetak.presensi', compact('presensi', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namabulan'));
+    }
+
+    public function laporanRekapPresensi()
+    {
+        return view('laporan.rekap-presensi');
     }
 }

@@ -1,4 +1,3 @@
-<!-- filepath: /c:/laragon/www/E-Presensi/resources/views/jabatan/index.blade.php -->
 <x-app-layout>
     <div class="py-4">
         <div class="max-w-12xl mx-auto sm:px-6 lg:px-8">
@@ -12,7 +11,6 @@
                                 <h1 class="dark:text-white"><b>Data Jabatan</b></h1>
                                 <div id="results-tooltip" role="tooltip"
                                     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                    Showing 1-100 of 436 results
                                     <div class="tooltip-arrow" data-popper-arrow=""></div>
                                 </div>
                             </div>
@@ -167,7 +165,7 @@
                     document.getElementById('edit_deskripsi').value = data.deskripsi;
                     document.getElementById('edit_form').action = `/jabatan/${id}`;
                 });
-            }
+        }
     </script>
     <script>
         function openShowModal(jabatan) {

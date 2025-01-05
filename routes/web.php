@@ -81,6 +81,14 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('jabatan', JabatanController::class);
     Route::get('/check-jabatan/{nama_jabatan}', [JabatanController::class, 'checkJabatan']);
+
+    Route::get('presensi/monitoring', [PresensiController::class, 'monitoring'])->name('presensi.monitoring');
+    Route::get('/presensi/showmap', [PresensiController::class, 'showMap'])->name('presensi.showmap');
+
+    Route::get('/laporan/presensi', [PresensiController::class, 'laporanPresensi'])->name('laporan.presensi');
+    Route::get('/laporan/rekap-presensi', [PresensiController::class, 'laporanRekapPresensi'])->name('laporan.rekap-presensi');
+
+    Route::post('/laporan/cetak/presensi', [PresensiController::class, 'cetakPresensi'])->name('laporan.cetakpresensi');
 });
 
 require __DIR__ . '/auth.php';  // Include authentication routes
