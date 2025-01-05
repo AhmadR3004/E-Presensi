@@ -23,14 +23,6 @@
             margin-top: 5px;
         }
 
-        .tabeldatapegawai {
-            margin-top: 20px;
-        }
-
-        .tabeldatapegawai td {
-            padding: 5px;
-        }
-
         .tabelpresensi {
             border-collapse: collapse;
             width: 100%;
@@ -41,12 +33,13 @@
             border: 1px solid black;
             padding: 8px;
             background: #dbdbdb;
+            font-size: 10px;
         }
 
         .tabelpresensi td {
             border: 1px solid black;
             padding: 5px;
-            font-size: 12px;
+            font-size: 10px;
         }
     </style>
 </head>
@@ -54,7 +47,7 @@
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 
-<body class="A4">
+<body class="A4 landscape">
 
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
@@ -80,85 +73,55 @@
         <div style="text-align: right; margin-top: 10px;">Banjarmasin, {{ date('j F Y') }}</div>
 
         <div style="text-align: center;">
-            <h3>LAPORAN E-PRESENSI PEGAWAI</h3>
+            <h3>LAPORAN REKAP E-PRESENSI PEGAWAI</h3>
         </div>
-
-        <table class="tabeldatapegawai">
-            <tr>
-                <td rowspan="5">
-                    @php
-                        $path = Storage::url('uploads/pegawai/' . $pegawai->foto);
-                    @endphp
-                    <img src="{{ url($path) }}" width="120px" height="150" alt="">
-                </td>
-            </tr>
-            <tr>
-                <td>NIP</td>
-                <td>:</td>
-                <td>{{ $nip }}</td>
-            </tr>
-            <tr>
-                <td>Nama Pegawai</td>
-                <td>:</td>
-                <td>{{ $pegawai->nama }}</td>
-            </tr>
-            <tr>
-                <td>Jabatan</td>
-                <td>:</td>
-                <td>{{ $jabatan->nama_jabatan }}</td>
-            </tr>
-            <tr>
-                <td>No. WhatsApp</td>
-                <td>:</td>
-                <td>{{ $pegawai->no_telp }}</td>
-            </tr>
-        </table>
 
         <table class="tabelpresensi">
             <tr>
-                <th>No.</th>
-                <th>Tanggal</th>
-                <th>Jam Masuk</th>
-                <th>Foto</th>
-                <th>Jam Pulang</th>
-                <th>Foto</th>
-                <th>Keterangan</th>
-                <th>Jam Kerja</th>
+                <th rowspan="2">NIP</th>
+                <th rowspan="2">Nama Pegawai</th>
+                <th colspan="31">Tanggal</th>
+                <th rowspan="2">TH</th>
+                <th rowspan="2">TT</th>
             </tr>
-            @foreach ($presensi as $d)
-                @php
-                    $path_in = Storage::url('uploads/absensi/' . $d->foto_in);
-                    $path_out = Storage::url('uploads/absensi/' . $d->foto_out);
-                    $cutOffTime = '09:00:00';
-                    $jamMasuk = strtotime($d->jam_in);
-                    $jamPulang = $d->jam_out != null ? strtotime($d->jam_out) : null;
-                    $batasAbsen = strtotime($cutOffTime);
-                    $terlambat = $jamMasuk > $batasAbsen;
-                    $selisihTerlambat = $terlambat ? gmdate('H:i:s', $jamMasuk - $batasAbsen) : '';
-                    $keterangan = $terlambat ? "Terlambat $selisihTerlambat" : 'Tepat Waktu';
-
-                    // Perhitungan jam kerja
-                    $jamKerja = $jamPulang ? gmdate('H:i:s', $jamPulang - $jamMasuk) : '-';
-                @endphp
+            <tr>
+                <?php
+                for($i=1; $i<=31; $i++){
+                    ?>
+                <th>{{ $i }}</th>
+                <?php
+                }
+                ?>
+            </tr>
+            @foreach ($rekap as $d)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ date('d-m-Y', strtotime($d->tgl_presensi)) }}</td>
-                    <td>{{ $d->jam_in }}</td>
-                    <td><img src="{{ url($path_in) }}" width="40" height="30" alt=""></td>
-                    <td>{{ $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</td>
+                    <td>{{ $d->pegawai_id }}</td>
+                    <td>{{ $d->nama }}</td>
+
+                    <?php
+                    $totalhadir = 0;
+                    $totalterlambat = 0;
+                    for($i=1; $i<=31; $i++){
+                        $tgl = 'tgl_'.$i;
+                        if(empty($d->$tgl)){
+                            $hadir = ['',''];
+                        }else {
+                            $hadir = explode("-",$d->$tgl);
+                            $totalhadir += 1;
+                            if($hadir[0] > "09:00:00"){
+                                $totalterlambat += 1;
+                            }
+                        }
+                    ?>
                     <td>
-                        @if ($d->jam_out != null)
-                            <img src="{{ url($path_out) }}" width="40" height="30" alt="">
-                        @else
-                            -
-                        @endif
+                        <span style="color:{{ $hadir[0] > '09:00:00' ? 'red' : '' }}">{{ $hadir[0] }}</span>
+                        <span style="color:{{ $hadir[1] < '16:00:00' ? 'red' : '' }}">{{ $hadir[1] }}</span>
                     </td>
-                    <td>
-                        <span class="inline-block px-3 py-1 text-sm font-semibold text-white rounded-full">
-                            {{ $keterangan }}
-                        </span>
-                    </td>
-                    <td>{{ $jamKerja }}</td>
+                    <?php
+                    }
+                    ?>
+                    <td>{{ $totalhadir }}</td>
+                    <td>{{ $totalterlambat }}</td>
                 </tr>
             @endforeach
         </table>

@@ -89,6 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/rekap-presensi', [PresensiController::class, 'laporanRekapPresensi'])->name('laporan.rekap-presensi');
 
     Route::post('/laporan/cetak/presensi', [PresensiController::class, 'cetakPresensi'])->name('laporan.cetakpresensi');
+    Route::post('/laporan/cetak/rekap', [PresensiController::class, 'cetakRekap'])->name('laporan.cetakrekap');
 });
 
 require __DIR__ . '/auth.php';  // Include authentication routes
