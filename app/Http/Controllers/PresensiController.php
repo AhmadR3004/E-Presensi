@@ -353,4 +353,43 @@ class PresensiController extends Controller
 
         return view('laporan.cetak.rekappresensi', compact('rekap', 'bulan', 'tahun', 'namabulan'));
     }
+
+    public function dataizinsakit()
+    {
+        $dataizinsakit = DB::table('izin_sakit')
+            ->join('pegawai', 'izin_sakit.pegawai_id', '=', 'pegawai.nip')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->select('izin_sakit.*', 'pegawai.*', 'jabatan.nama_jabatan')
+            ->orderBy('tgl_izin', 'desc')
+            ->get();
+
+        return view('presensi.dataizinSakit', compact('dataizinsakit'));
+    }
+
+
+    public function approveizinsakit(Request $request)
+    {
+        $status_approved = $request->status_approved;
+        $id_izinsakit_form = $request->id_izinsakit_form;
+        $update = DB::table('izin_sakit')
+            ->where('id', $id_izinsakit_form)
+            ->update(['status_approved' => $status_approved]);
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Data Berhasil disetujui!']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal disetujui!']);
+        }
+    }
+
+    public function batalkanizinsakit($id)
+    {
+        $update = DB::table('izin_sakit')
+            ->where('id', $id)
+            ->update(['status_approved' => 0]);
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Data Berhasil dikembalikan!']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal dikembalikan!']);
+        }
+    }
 }
