@@ -7,6 +7,7 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\PresensiController;
 use App\Models\Presensi;
 
@@ -90,6 +91,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/laporan/cetak/presensi', [PresensiController::class, 'cetakPresensi'])->name('laporan.cetakpresensi');
     Route::post('/laporan/cetak/rekap', [PresensiController::class, 'cetakRekap'])->name('laporan.cetakrekap');
+
+    Route::get('/konfigurasi/lokasikantor', [KonfigurasiController::class, 'lokasikantor'])->name('konfigurasi.lokasikantor');
+    Route::post('/konfigurasi/updatelokasikantor', [KonfigurasiController::class, 'updatelokasikantor'])->name('konfigurasi.updatelokasikantor');
 });
 
 require __DIR__ . '/auth.php';  // Include authentication routes

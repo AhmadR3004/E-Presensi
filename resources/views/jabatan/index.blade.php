@@ -1,4 +1,15 @@
 <x-app-layout>
+    @if (session('status') && session('message'))
+        <script>
+            Swal.fire({
+                icon: '{{ session('status') }}',
+                title: '{{ session('status') == 'success' ? 'Success!' : 'Error!' }}',
+                text: '{{ session('message') }}',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
+
     <div class="py-4">
         <div class="max-w-12xl mx-auto sm:px-6 lg:px-8">
             <!-- Start block -->

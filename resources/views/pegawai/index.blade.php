@@ -1,15 +1,13 @@
 <x-app-layout>
-    {{-- Cek jika ada variabel data dan tampilkan alert --}}
-    @if (isset($data))
-        @if ($data['status'] == 'success')
-            <div class="alert alert-success">
-                {{ $data['message'] }}
-            </div>
-        @elseif ($data['status'] == 'error')
-            <div class="alert alert-danger">
-                {{ $data['message'] }}
-            </div>
-        @endif
+    @if (session('status') && session('message'))
+        <script>
+            Swal.fire({
+                icon: '{{ session('status') }}',
+                title: '{{ session('status') == 'success' ? 'Success!' : 'Error!' }}',
+                text: '{{ session('message') }}',
+                confirmButtonText: 'OK'
+            });
+        </script>
     @endif
 
     <div class="py-4">

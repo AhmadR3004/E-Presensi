@@ -25,7 +25,35 @@ class JabatanController extends Controller
         ]);
 
         Jabatan::create($request->all());
-        return redirect()->route('jabatan.index')->with('success', 'Jabatan berhasil ditambahkan');
+        return redirect()->route('jabatan.index')->with([
+            'status' => 'success',
+            'message' => 'Jabatan berhasil ditambahkan'
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_jabatan' => 'required|string|max:100',
+            'deskripsi' => 'nullable|string'
+        ]);
+
+        $jabatan = Jabatan::findOrFail($id);
+        $jabatan->update($request->all());
+        return redirect()->route('jabatan.index')->with([
+            'status' => 'success',
+            'message' => 'Jabatan berhasil diperbarui'
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $jabatan = Jabatan::findOrFail($id);
+        $jabatan->delete();
+        return redirect()->route('jabatan.index')->with([
+            'status' => 'success',
+            'message' => 'Jabatan berhasil dihapus'
+        ]);
     }
 
     public function checkJabatan($nama_jabatan)
@@ -41,24 +69,5 @@ class JabatanController extends Controller
     {
         $jabatan = Jabatan::find($id);
         return response()->json($jabatan);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nama_jabatan' => 'required|string|max:100',
-            'deskripsi' => 'nullable|string'
-        ]);
-
-        $jabatan = Jabatan::findOrFail($id);
-        $jabatan->update($request->all());
-        return redirect()->route('jabatan.index')->with('success', 'Jabatan berhasil diperbarui');
-    }
-
-    public function destroy($id)
-    {
-        $jabatan = Jabatan::findOrFail($id);
-        $jabatan->delete();
-        return redirect()->route('jabatan.index')->with('success', 'Jabatan berhasil dihapus');
     }
 }
