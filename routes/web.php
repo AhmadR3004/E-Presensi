@@ -57,6 +57,7 @@ Route::middleware('auth:pegawai')->group(function () {
     Route::get('/presensi/createIzin', [PresensiController::class, 'CreateIzin']);
     Route::post('/presensi/storeIzin', [PresensiController::class, 'storeIzin']);
     Route::delete('/presensi/izinsakit/{id}', [PresensiController::class, 'destroy'])->name('dataizin.destroy');
+    Route::post('/presensi/cekpengajuanizin', [PresensiController::class, 'cekpengajuanizin']);
 });
 
 // General routes for authenticated users (using default "web" guard)

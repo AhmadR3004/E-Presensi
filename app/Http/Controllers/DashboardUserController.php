@@ -50,11 +50,13 @@ class DashboardUserController extends Controller
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         $rekapizin = DB::table('izin_sakit')
-            ->selectRaw('SUM(IF(status = "i",1,0)) as jmlizin, SUM(IF(status = "s",1,0)) as jmlsakit')
+            ->selectRaw('
+                            SUM(CASE WHEN status = "i" AND status_approved = 1 THEN 1 ELSE 0 END) as jmlizin,
+                            SUM(CASE WHEN status = "s" AND status_approved = 1 THEN 1 ELSE 0 END) as jmlsakit
+                        ')
             ->where('pegawai_id', $nip)
-            ->whereRaw('MONTH(tgl_izin) = "' . $bulanini . '"')
-            ->whereRaw('YEAR(tgl_izin) = "' . $tahunini . '"')
-            ->where('status_approved', 1)
+            ->whereRaw('MONTH(tgl_izin) = ?', [$bulanini])
+            ->whereRaw('YEAR(tgl_izin) = ?', [$tahunini])
             ->first();
 
         return view('DashboardUser.dashboard', compact('pegawai', 'presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini', 'rekapPresensi', 'leaderboard', 'rekapizin'));

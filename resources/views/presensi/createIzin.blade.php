@@ -3,7 +3,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <style>
         .datepicker-modal {
-            max-height: 347px !important;
+            max-height: 350px !important;
+            width: 100% !important;
+            overflow: auto;
         }
 
         .datepicker-date-display {
@@ -54,6 +56,30 @@
         $(document).ready(function() {
             $(".datepicker").datepicker({
                 format: "yyyy-mm-dd"
+            });
+
+            $('#tgl_izin').change(function(e) {
+                var tgl_izin = $(this).val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/presensi/cekpengajuanizin',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        tgl_izin: tgl_izin
+                    },
+                    cache: false,
+                    success: function(respond) {
+                        if (respond == 1) {
+                            Swal.fire({
+                                title: 'Oops',
+                                text: 'Anda sudah Melakukan Pengajuan pada tanggal itu!',
+                                icon: 'warning',
+                            }).then((result) => {
+                                $('#tgl_izin').val('');
+                            });
+                        }
+                    }
+                });
             });
 
             $('#formIzin').submit(function() {

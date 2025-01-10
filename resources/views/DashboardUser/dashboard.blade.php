@@ -22,12 +22,13 @@
 
         <!-- Tombol Logout di ujung atas kanan dengan style dan !important -->
         <div class="fab-button"
-            style="position: fixed !important; right: 20px !important; top: 45px !important; z-index: 9999 !important;">
+            style="position: absolute !important; right: 20px !important; top: 45px !important; z-index: 9999 !important;">
             <a href="javascript:void(0);" class="fab" id="logout-button"
                 style="background-color: transparent !important; color: white !important; border-radius: 9999px !important; padding: 0.5rem !important; box-shadow: 3px 4px 6px rgb(0, 0, 0, 0.6) !important;">
                 <ion-icon name="exit" class="text-xl"></ion-icon>
             </a>
         </div>
+
     </div>
 
     <!-- Tambahkan SweetAlert2 JavaScript -->
@@ -227,8 +228,9 @@
                                     <div class="in">
                                         <div>{{ date('d-m-Y', strtotime($d->tgl_presensi)) }}</div>
                                         <span class="badge badge-success">{{ $d->jam_in }}</span>
-                                        <span
-                                            class="badge badge-danger">{{ $presensihariini != null && $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</span>
+                                        <span class="badge badge-danger">
+                                            {{ !empty($d->jam_out) ? $d->jam_out : 'Belum Absen' }}
+                                        </span>
                                     </div>
                                 </div>
                             </li>

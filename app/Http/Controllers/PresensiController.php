@@ -208,7 +208,11 @@ class PresensiController extends Controller
     public function izinSakit()
     {
         $nip = Auth::guard('pegawai')->user()->nip;
-        $dataizin = DB::table('Izin_Sakit')->where('pegawai_id', $nip)->get();
+        // Urutkan berdasarkan tgl_izin secara menurun (terbaru di atas)
+        $dataizin = DB::table('Izin_Sakit')
+            ->where('pegawai_id', $nip)
+            ->orderBy('tgl_izin', 'desc') // Menyusun dari yang terbaru
+            ->get();
         return view('presensi.izinSakit', compact('dataizin'));
     }
 
@@ -354,18 +358,43 @@ class PresensiController extends Controller
         return view('laporan.cetak.rekappresensi', compact('rekap', 'bulan', 'tahun', 'namabulan'));
     }
 
-    public function dataizinsakit()
+    public function dataizinsakit(Request $request)
     {
-        $dataizinsakit = DB::table('izin_sakit')
+        $query = DB::table('izin_sakit')
             ->join('pegawai', 'izin_sakit.pegawai_id', '=', 'pegawai.nip')
             ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
-            ->select('izin_sakit.*', 'pegawai.*', 'jabatan.nama_jabatan')
-            ->orderBy('tgl_izin', 'desc')
-            ->get();
+            ->select('izin_sakit.*', 'pegawai.*', 'jabatan.nama_jabatan');
 
+        // Filter berdasarkan input form
+        if ($request->filled('dari')) {
+            $query->whereDate('tgl_izin', '>=', $request->dari);
+        }
+
+        if ($request->filled('sampai')) {
+            $query->whereDate('tgl_izin', '<=', $request->sampai);
+        }
+
+        if ($request->filled('nip')) {
+            $query->where('pegawai.nip', 'like', '%' . $request->nip . '%');
+        }
+
+        if ($request->filled('nama')) {
+            $query->where('pegawai.nama', 'like', '%' . $request->nama . '%');
+        }
+
+        if ($request->filled('status_approved')) {
+            $query->where('izin_sakit.status_approved', '=', $request->status_approved);
+        }
+
+        // Paginate data, passing the query parameters to the pagination links
+        $dataizinsakit = $query->orderBy('tgl_izin', 'desc')->paginate(10);
+
+        // Preserve query parameters in pagination links
+        $dataizinsakit->appends($request->except('page'));
+
+        // Pass the paginated data to the view
         return view('presensi.dataizinSakit', compact('dataizinsakit'));
     }
-
 
     public function approveizinsakit(Request $request)
     {
@@ -391,5 +420,14 @@ class PresensiController extends Controller
         } else {
             return Redirect::back()->with(['warning' => 'Data Gagal dikembalikan!']);
         }
+    }
+
+    public function cekpengajuanizin(Request $request)
+    {
+        $tgl_izin = $request->tgl_izin;
+        $nip = Auth::guard('pegawai')->user()->nip;
+
+        $cek = DB::table('izin_sakit')->where('pegawai_id', $nip)->where('tgl_izin', $tgl_izin)->count();
+        return $cek;
     }
 }

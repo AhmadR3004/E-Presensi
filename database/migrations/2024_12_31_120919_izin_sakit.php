@@ -23,7 +23,7 @@ return new class extends Migration
                 ->cascadeOnDelete(); // Hapus otomatis jika data pegawai dihapus
             $table->date('tgl_izin'); // Kolom untuk tanggal izin
             $table->char('status', 1) // Status izin (S: Sakit, I: Izin)
-                ->comment('S: Sakit, I: Izin');
+                ->comment('s: Sakit, i: Izin');
             $table->text('keterangan')->nullable(); // Kolom untuk keterangan (opsional)
             $table->tinyInteger('status_approved') // Status persetujuan (0: Pending, 1: Disetujui, 2: Ditolak)
                 ->default(0)
