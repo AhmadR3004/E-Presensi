@@ -8,41 +8,83 @@ class JabatanFactory extends Factory
 {
     public function definition(): array
     {
+        // Data jabatan dengan tambahan informasi
         $jabatan = [
             [
+                'kode_jabatan' => 'KD01',
                 'nama_jabatan' => 'Kepala Dinas',
-                'deskripsi' => 'Memimpin dan mengkoordinasikan pelaksanaan urusan pemerintahan bidang administrasi kependudukan dan pencatatan sipil'
+                'pangkat' => 'IV/e',
+                'departemen' => 'Administrasi Kependudukan',
+                'tingkat_jabatan' => 'Struktural',
+                'gaji_pokok' => 10000000.00,
+                'tunjangan' => 5000000.00,
             ],
             [
+                'kode_jabatan' => 'KD02',
                 'nama_jabatan' => 'Sekretaris',
-                'deskripsi' => 'Membantu Kepala Dinas dalam melaksanakan koordinasi kegiatan, pengelolaan keuangan dan urusan umum'
+                'pangkat' => 'IV/d',
+                'departemen' => 'Administrasi Kependudukan',
+                'tingkat_jabatan' => 'Struktural',
+                'gaji_pokok' => 9000000.00,
+                'tunjangan' => 4000000.00,
             ],
             [
+                'kode_jabatan' => 'KD03',
                 'nama_jabatan' => 'Kepala Bidang Pelayanan Pendaftaran Penduduk',
-                'deskripsi' => 'Memimpin pelaksanaan pelayanan pendaftaran penduduk'
+                'pangkat' => 'IV/c',
+                'departemen' => 'Pelayanan Pendaftaran Penduduk',
+                'tingkat_jabatan' => 'Struktural',
+                'gaji_pokok' => 8500000.00,
+                'tunjangan' => 3500000.00,
             ],
             [
+                'kode_jabatan' => 'KD04',
                 'nama_jabatan' => 'Kepala Bidang Pelayanan Pencatatan Sipil',
-                'deskripsi' => 'Memimpin pelaksanaan pelayanan pencatatan sipil'
+                'pangkat' => 'IV/c',
+                'departemen' => 'Pelayanan Pencatatan Sipil',
+                'tingkat_jabatan' => 'Struktural',
+                'gaji_pokok' => 8500000.00,
+                'tunjangan' => 3500000.00,
             ],
             [
+                'kode_jabatan' => 'KD05',
                 'nama_jabatan' => 'Kepala Bidang PIAK dan Pemanfaatan Data',
-                'deskripsi' => 'Memimpin pengelolaan informasi administrasi kependudukan dan pemanfaatan data'
+                'pangkat' => 'IV/b',
+                'departemen' => 'PIAK dan Pemanfaatan Data',
+                'tingkat_jabatan' => 'Struktural',
+                'gaji_pokok' => 8000000.00,
+                'tunjangan' => 3000000.00,
             ],
             [
+                'kode_jabatan' => 'KD06',
                 'nama_jabatan' => 'Staff Pelayanan',
-                'deskripsi' => 'Melaksanakan tugas pelayanan langsung kepada masyarakat'
+                'pangkat' => 'III/a',
+                'departemen' => 'Pelayanan',
+                'tingkat_jabatan' => 'Fungsional',
+                'gaji_pokok' => 5000000.00,
+                'tunjangan' => 2000000.00,
             ],
             [
+                'kode_jabatan' => 'KD07',
                 'nama_jabatan' => 'Staff Administrasi',
-                'deskripsi' => 'Melaksanakan tugas administrasi dan pengarsipan dokumen'
+                'pangkat' => 'III/a',
+                'departemen' => 'Administrasi',
+                'tingkat_jabatan' => 'Fungsional',
+                'gaji_pokok' => 5000000.00,
+                'tunjangan' => 2000000.00,
             ],
             [
+                'kode_jabatan' => 'KD08',
                 'nama_jabatan' => 'Operator Sistem',
-                'deskripsi' => 'Mengoperasikan dan memelihara sistem informasi kependudukan'
+                'pangkat' => 'III/b',
+                'departemen' => 'Sistem Informasi',
+                'tingkat_jabatan' => 'Fungsional',
+                'gaji_pokok' => 6000000.00,
+                'tunjangan' => 2500000.00,
             ]
         ];
 
+        // Mengembalikan salah satu data jabatan secara acak
         return $this->faker->randomElement($jabatan);
     }
 }

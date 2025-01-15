@@ -20,14 +20,45 @@
             </div>
             <!-- Modal body -->
             <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                <!-- Kode Jabatan -->
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Kode
+                            Jabatan</b></label>
+                    <p id="show_kode_jabatan" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <!-- Nama Jabatan -->
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Nama
                             Jabatan</b></label>
                     <p id="show_nama_jabatan" class="text-gray-900 dark:text-white"></p>
                 </div>
+                <!-- Pangkat -->
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Deskripsi</b></label>
-                    <p id="show_deskripsi" class="text-gray-900 dark:text-white"></p>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Pangkat</b></label>
+                    <p id="show_pangkat" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <!-- Departemen -->
+                <div>
+                    <label
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Departemen</b></label>
+                    <p id="show_departemen" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <!-- Tingkat Jabatan -->
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Tingkat
+                            Jabatan</b></label>
+                    <p id="show_tingkat_jabatan" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <!-- Gaji Pokok -->
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Gaji
+                            Pokok</b></label>
+                    <p id="show_gaji_pokok" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <!-- Tunjangan -->
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><b>Tunjangan</b></label>
+                    <p id="show_tunjangan" class="text-gray-900 dark:text-white"></p>
                 </div>
             </div>
         </div>

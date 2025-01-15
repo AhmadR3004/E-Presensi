@@ -9,9 +9,20 @@ class Jabatan extends Model
 {
     use HasFactory;
 
-    protected $table = 'jabatan';
-    protected $fillable = ['nama_jabatan', 'deskripsi'];
+    protected $table = 'jabatan'; // Nama tabel
 
+    // Kolom-kolom yang bisa diisi mass-assignment
+    protected $fillable = [
+        'kode_jabatan',
+        'nama_jabatan',
+        'pangkat',
+        'departemen',
+        'tingkat_jabatan',
+        'gaji_pokok',
+        'tunjangan'
+    ];
+
+    // Relasi dengan model Pegawai
     public function pegawai()
     {
         return $this->hasMany(Pegawai::class);

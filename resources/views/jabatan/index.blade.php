@@ -66,8 +66,13 @@
                                 <thead
                                     class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
+                                        <th scope="col" class="p-4">Kode Jabatan</th>
                                         <th scope="col" class="p-4">Nama Jabatan</th>
-                                        <th scope="col" class="p-4">Deskripsi</th>
+                                        <th scope="col" class="p-4">Pangkat</th>
+                                        <th scope="col" class="p-4">Departemen</th>
+                                        <th scope="col" class="p-4">Tingkat Jabatan</th>
+                                        <th scope="col" class="p-4">Gaji Pokok</th>
+                                        <th scope="col" class="p-4">Tunjangan</th>
                                         <th scope="col" class="p-4">Aksi</th>
                                     </tr>
                                 </thead>
@@ -75,8 +80,15 @@
                                     @foreach ($jabatans as $jabatan)
                                         <tr
                                             class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <td class="px-4 py-3">{{ $jabatan->kode_jabatan }}</td>
                                             <td class="px-4 py-3">{{ $jabatan->nama_jabatan }}</td>
-                                            <td class="px-4 py-3">{{ $jabatan->deskripsi }}</td>
+                                            <td class="px-4 py-3">{{ $jabatan->pangkat }}</td>
+                                            <td class="px-4 py-3">{{ $jabatan->departemen }}</td>
+                                            <td class="px-4 py-3">{{ $jabatan->tingkat_jabatan }}</td>
+                                            <td class="px-4 py-3">{{ number_format($jabatan->gaji_pokok, 0, ',', '.') }}
+                                            </td>
+                                            <td class="px-4 py-3">{{ number_format($jabatan->tunjangan, 0, ',', '.') }}
+                                            </td>
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center space-x-4">
                                                     <button type="button"
@@ -84,7 +96,7 @@
                                                         data-modal-toggle="editJabatanModal"
                                                         onclick="openEditModal({{ $jabatan->id }})">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20"
+                                                            class="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
                                                             <path
                                                                 d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
@@ -98,7 +110,7 @@
                                                         class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                                         data-modal-toggle="showJabatanModal"
                                                         onclick="openShowModal({{ $jabatan }})">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24"
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                             fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
                                                             <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -111,7 +123,7 @@
                                                         data-modal-toggle="deleteJabatanModal"
                                                         onclick="openDeleteModal({{ $jabatan->id }})">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20"
+                                                            class="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
                                                             <path fill-rule="evenodd"
                                                                 d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
@@ -125,6 +137,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
                         </div>
                         <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
                             aria-label="Table navigation">
@@ -172,16 +185,33 @@
             fetch(`/jabatan/${id}/edit`)
                 .then(response => response.json())
                 .then(data => {
+                    document.getElementById('edit_kode_jabatan').value = data.kode_jabatan;
                     document.getElementById('edit_nama_jabatan').value = data.nama_jabatan;
-                    document.getElementById('edit_deskripsi').value = data.deskripsi;
+                    document.getElementById('edit_pangkat').value = data.pangkat;
+                    document.getElementById('edit_departemen').value = data.departemen;
+                    document.getElementById('edit_tingkat_jabatan').value = data.tingkat_jabatan;
+                    document.getElementById('edit_gaji_pokok').value = data.gaji_pokok;
+                    document.getElementById('edit_tunjangan').value = data.tunjangan || ''; // Handle null tunjangan
+
+                    // Set the form action for updating the jabatan
                     document.getElementById('edit_form').action = `/jabatan/${id}`;
                 });
         }
     </script>
     <script>
         function openShowModal(jabatan) {
-            document.getElementById('show_nama_jabatan').innerText = jabatan.nama_jabatan;
-            document.getElementById('show_deskripsi').innerText = jabatan.deskripsi;
+            document.getElementById('show_kode_jabatan').textContent = jabatan.kode_jabatan;
+            document.getElementById('show_nama_jabatan').textContent = jabatan.nama_jabatan;
+            document.getElementById('show_pangkat').textContent = jabatan.pangkat;
+            document.getElementById('show_departemen').textContent = jabatan.departemen;
+            document.getElementById('show_tingkat_jabatan').textContent = jabatan.tingkat_jabatan;
+            document.getElementById('show_gaji_pokok').textContent = formatCurrency(jabatan.gaji_pokok);
+            document.getElementById('show_tunjangan').textContent = formatCurrency(jabatan.tunjangan);
+        }
+
+        // Fungsi untuk format mata uang IDR
+        function formatCurrency(amount) {
+            return 'Rp ' + amount.toLocaleString('id-ID');
         }
     </script>
     <script>

@@ -20,11 +20,17 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_jabatan' => 'required|string|unique:jabatan,nama_jabatan',
-            'deskripsi' => 'nullable|string'
+            'kode_jabatan' => 'required|string|max:20|unique:jabatan,kode_jabatan',
+            'nama_jabatan' => 'required|string|max:100|unique:jabatan,nama_jabatan',
+            'pangkat' => 'required|string|max:50',
+            'departemen' => 'required|string|max:100',
+            'tingkat_jabatan' => 'required|string|max:50',
+            'gaji_pokok' => 'required|numeric',
+            'tunjangan' => 'nullable|numeric',
         ]);
 
         Jabatan::create($request->all());
+
         return redirect()->route('jabatan.index')->with([
             'status' => 'success',
             'message' => 'Jabatan berhasil ditambahkan'
@@ -34,12 +40,18 @@ class JabatanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_jabatan' => 'required|string|max:100',
-            'deskripsi' => 'nullable|string'
+            'kode_jabatan' => 'required|string|max:20|unique:jabatan,kode_jabatan,' . $id,
+            'nama_jabatan' => 'required|string|max:100|unique:jabatan,nama_jabatan,' . $id,
+            'pangkat' => 'required|string|max:50',
+            'departemen' => 'required|string|max:100',
+            'tingkat_jabatan' => 'required|string|max:50',
+            'gaji_pokok' => 'required|numeric',
+            'tunjangan' => 'nullable|numeric',
         ]);
 
         $jabatan = Jabatan::findOrFail($id);
         $jabatan->update($request->all());
+
         return redirect()->route('jabatan.index')->with([
             'status' => 'success',
             'message' => 'Jabatan berhasil diperbarui'

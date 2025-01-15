@@ -19,10 +19,19 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <form id="edit_form" method="POST" enctype="multipart/form-data">
+            <form id="edit_form" action="{{ route('jabatan.update', ':id') }}" method="POST"
+                enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                    <div>
+                        <label for="edit_kode_jabatan" class="block mb-2 text-sm font-medium text-gray-900">Kode
+                            Jabatan</label>
+                        <input type="text" name="kode_jabatan" id="edit_kode_jabatan"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            required>
+                    </div>
+
                     <div>
                         <label for="edit_nama_jabatan" class="block mb-2 text-sm font-medium text-gray-900">Nama
                             Jabatan</label>
@@ -30,14 +39,47 @@
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                             required>
                     </div>
+
                     <div>
-                        <label for="edit_deskripsi"
-                            class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
-                        <textarea name="deskripsi" id="edit_deskripsi" rows="4"
+                        <label for="edit_pangkat" class="block mb-2 text-sm font-medium text-gray-900">Pangkat</label>
+                        <input type="text" name="pangkat" id="edit_pangkat"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            required></textarea>
+                            required>
+                    </div>
+
+                    <div>
+                        <label for="edit_departemen"
+                            class="block mb-2 text-sm font-medium text-gray-900">Departemen</label>
+                        <input type="text" name="departemen" id="edit_departemen"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            required>
+                    </div>
+
+                    <div>
+                        <label for="edit_tingkat_jabatan" class="block mb-2 text-sm font-medium text-gray-900">Tingkat
+                            Jabatan</label>
+                        <input type="text" name="tingkat_jabatan" id="edit_tingkat_jabatan"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            required>
+                    </div>
+
+                    <div>
+                        <label for="edit_gaji_pokok" class="block mb-2 text-sm font-medium text-gray-900">Gaji
+                            Pokok</label>
+                        <input type="number" name="gaji_pokok" id="edit_gaji_pokok"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            required step="0.01">
+                    </div>
+
+                    <div>
+                        <label for="edit_tunjangan"
+                            class="block mb-2 text-sm font-medium text-gray-900">Tunjangan</label>
+                        <input type="number" name="tunjangan" id="edit_tunjangan"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            step="0.01">
                     </div>
                 </div>
+
                 <button type="submit"
                     class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5">
                     Update Jabatan

@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('nama');
             $table->foreignId('jabatan_id')
                 ->constrained('jabatan')
+                ->onDelete('cascade')  // Menambahkan pengaturan untuk menghapus data terkait di tabel pegawai saat jabatan dihapus
                 ->cascadeOnUpdate();
             $table->text('alamat');
             $table->string('no_telp')->unique();

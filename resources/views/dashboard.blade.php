@@ -3,6 +3,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="text-gray-900 dark:text-gray-100">
                 <a class="text-sm font-bold">Selamat Datang, {{ $userName }}</a>
+                <a class="text-sm font-semibold">Berikut adalah Data Pegawai Hari ini!</a>
             </div>
         </div>
     </div>
@@ -13,7 +14,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <!-- Pegawai Hadir -->
                     <div
-                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300 hover:scale-105">
+                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300">
                         <div class="bg-green-100 p-3 rounded-md text-3xl text-green-600 mb-3">
                             <i class="fas fa-user-check"></i>
                         </div>
@@ -25,7 +26,7 @@
 
                     <!-- Pegawai Izin -->
                     <div
-                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300 hover:scale-105">
+                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300">
                         <div class="bg-yellow-100 p-3 rounded-md text-3xl text-yellow-600 mb-3">
                             <i class="fas fa-user-times"></i>
                         </div>
@@ -37,7 +38,7 @@
 
                     <!-- Pegawai Sakit -->
                     <div
-                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300 hover:scale-105">
+                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300">
                         <div class="bg-red-100 p-3 rounded-md text-3xl text-red-600 mb-3">
                             <i class="fas fa-procedures"></i>
                         </div>
@@ -49,7 +50,7 @@
 
                     <!-- Pegawai Terlambat -->
                     <div
-                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300 hover:scale-105">
+                        class="p-3 rounded-md shadow text-center flex items-center space-x-3 bg-white transform transition-transform duration-300">
                         <div class="bg-blue-100 p-3 rounded-md text-3xl text-blue-600 mb-3">
                             <i class="fas fa-clock"></i>
                         </div>

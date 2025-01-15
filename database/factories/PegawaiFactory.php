@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Jabatan;
+use App\Models\Pegawai;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PegawaiFactory extends Factory
@@ -11,9 +12,9 @@ class PegawaiFactory extends Factory
     {
         $faker = \Faker\Factory::create('id_ID');
 
-        // Ambil random jabatan_id atau fallback ke null jika tidak ada data jabatan
+        // Cek jika tabel Jabatan kosong dan ambil jabatan pertama sebagai fallback
         $jabatan = Jabatan::inRandomOrder()->first();
-        $jabatanId = $jabatan ? $jabatan->id : null;
+        $jabatanId = $jabatan ? $jabatan->id : Jabatan::first()->id; // Menggunakan Jabatan pertama sebagai fallback
 
         return [
             'nama' => $faker->name,

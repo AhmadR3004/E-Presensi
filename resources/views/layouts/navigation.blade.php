@@ -238,6 +238,12 @@
                     <x-responsive-nav-link :href="route('laporan.rekap-presensi')">
                         {{ __('Rekap Presensi') }}
                     </x-responsive-nav-link>
+                    <x-dropdown-link :href="route('laporan.izinsakit')">
+                        {{ __('Izin Sakit') }}
+                    </x-dropdown-link>
+                    <x-dropdown-link :href="route('laporan.rekap-izinsakit')">
+                        {{ __('Rekap Izin Sakit') }}
+                    </x-dropdown-link>
                 </x-slot>
             </x-dropdown>
         </div>

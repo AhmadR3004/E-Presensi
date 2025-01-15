@@ -25,45 +25,80 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        // Seed Jabatan first
-        $jabatans = [
-            [
-                'nama_jabatan' => 'Kepala Dinas',
-                'deskripsi' => 'Memimpin dan mengkoordinasikan pelaksanaan urusan pemerintahan bidang administrasi kependudukan dan pencatatan sipil'
-            ],
-            [
-                'nama_jabatan' => 'Sekretaris',
-                'deskripsi' => 'Membantu Kepala Dinas dalam melaksanakan koordinasi kegiatan, pengelolaan keuangan dan urusan umum'
-            ],
-            [
-                'nama_jabatan' => 'Kepala Bidang Pelayanan Pendaftaran Penduduk',
-                'deskripsi' => 'Memimpin pelaksanaan pelayanan pendaftaran penduduk'
-            ],
-            [
-                'nama_jabatan' => 'Kepala Bidang Pelayanan Pencatatan Sipil',
-                'deskripsi' => 'Memimpin pelaksanaan pelayanan pencatatan sipil'
-            ],
-            [
-                'nama_jabatan' => 'Kepala Bidang PIAK dan Pemanfaatan Data',
-                'deskripsi' => 'Memimpin pengelolaan informasi administrasi kependudukan dan pemanfaatan data'
-            ],
-            [
-                'nama_jabatan' => 'Staff Pelayanan',
-                'deskripsi' => 'Melaksanakan tugas pelayanan langsung kepada masyarakat'
-            ],
-            [
-                'nama_jabatan' => 'Staff Administrasi',
-                'deskripsi' => 'Melaksanakan tugas administrasi dan pengarsipan dokumen'
-            ],
-            [
-                'nama_jabatan' => 'Operator Sistem',
-                'deskripsi' => 'Mengoperasikan dan memelihara sistem informasi kependudukan'
-            ]
-        ];
-
-        foreach ($jabatans as $jabatan) {
-            Jabatan::firstOrCreate(['nama_jabatan' => $jabatan['nama_jabatan']], $jabatan);
-        }
+        // Seed Jabatan secara manual agar kode jabatan unik
+        Jabatan::create([
+            'kode_jabatan' => 'KD01',
+            'nama_jabatan' => 'Kepala Dinas',
+            'pangkat' => 'IV/e',
+            'departemen' => 'Administrasi Kependudukan',
+            'tingkat_jabatan' => 'Struktural',
+            'gaji_pokok' => 10000000,
+            'tunjangan' => 5000000,
+        ]);
+        Jabatan::create([
+            'kode_jabatan' => 'KD02',
+            'nama_jabatan' => 'Sekretaris',
+            'pangkat' => 'IV/d',
+            'departemen' => 'Administrasi Kependudukan',
+            'tingkat_jabatan' => 'Struktural',
+            'gaji_pokok' => 9000000,
+            'tunjangan' => 4000000,
+        ]);
+        Jabatan::create([
+            'kode_jabatan' => 'KD03',
+            'nama_jabatan' => 'Kepala Bidang Pelayanan Pendaftaran Penduduk',
+            'pangkat' => 'IV/c',
+            'departemen' => 'Pelayanan Pendaftaran Penduduk',
+            'tingkat_jabatan' => 'Struktural',
+            'gaji_pokok' => 8500000,
+            'tunjangan' => 3500000,
+        ]);
+        Jabatan::create([
+            'kode_jabatan' => 'KD04',
+            'nama_jabatan' => 'Kepala Bidang Pelayanan Pencatatan Sipil',
+            'pangkat' => 'IV/c',
+            'departemen' => 'Pelayanan Pencatatan Sipil',
+            'tingkat_jabatan' => 'Struktural',
+            'gaji_pokok' => 8500000,
+            'tunjangan' => 3500000,
+        ]);
+        Jabatan::create([
+            'kode_jabatan' => 'KD05',
+            'nama_jabatan' => 'Kepala Bidang PIAK dan Pemanfaatan Data',
+            'pangkat' => 'IV/b',
+            'departemen' => 'PIAK dan Pemanfaatan Data',
+            'tingkat_jabatan' => 'Struktural',
+            'gaji_pokok' => 8000000,
+            'tunjangan' => 3000000,
+        ]);
+        Jabatan::create([
+            'kode_jabatan' => 'KD06',
+            'nama_jabatan' => 'Staff Pelayanan',
+            'pangkat' => 'III/a',
+            'departemen' => 'Pelayanan',
+            'tingkat_jabatan' => 'Fungsional',
+            'gaji_pokok' => 5000000,
+            'tunjangan' => 2000000,
+        ]);
+        Jabatan::create([
+            'kode_jabatan' => 'KD07',
+            'nama_jabatan' => 'Staff Administrasi',
+            'pangkat' => 'III/a',
+            'departemen' => 'Administrasi',
+            'tingkat_jabatan' => 'Fungsional',
+            'gaji_pokok' => 5000000,
+            'tunjangan' => 2000000,
+        ]);
+        Jabatan::create([
+            'kode_jabatan' => 'KD08',
+            'nama_jabatan' => 'Operator Sistem',
+            'pangkat' => 'III/b',
+            'departemen' => 'Sistem Informasi',
+            'tingkat_jabatan' => 'Fungsional',
+            'gaji_pokok' => 6000000,
+            'tunjangan' => 2500000,
+        ]);
+        // Tambahkan jabatan lainnya sesuai kebutuhan
 
         // Seed Pegawai with random Jabatan
         Pegawai::factory()->count(9)->create();
@@ -88,20 +123,30 @@ class DatabaseSeeder extends Seeder
 
         // Loop untuk setiap pegawai
         Pegawai::all()->each(function ($pegawai) {
-            // Tentukan rentang tanggal presensi dari November 2024 hingga sekarang
-            $startDate = \Carbon\Carbon::createFromDate(2024, 11, 1); // Mulai dari November 2024
+            // Tentukan rentang tanggal presensi dari 1 Desember 2024 hingga sekarang
+            $startDate = \Carbon\Carbon::createFromDate(2024, 12, 1); // Mulai dari 1 Desember 2024
             $endDate = \Carbon\Carbon::now(); // Sampai tanggal sekarang
 
             // Loop melalui setiap hari kerja (Senin sampai Jumat)
             for ($date = $startDate; $date <= $endDate; $date->addDay()) {
                 // Pastikan hanya hari kerja (Senin sampai Jumat)
                 if ($date->isWeekday()) {
+                    // Menentukan jam masuk (jam_in) antara jam 8:00 hingga 10:00
+                    $jamInHour = rand(8, 10);
+                    $jamInMinute = rand(0, 59);
+                    $jamIn = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date->format('Y-m-d') . ' ' . sprintf('%02d', $jamInHour) . ':' . sprintf('%02d', $jamInMinute) . ':00');
+
+                    // Menentukan jam keluar (jam_out) antara jam 15:00 hingga 17:00
+                    $jamOutHour = rand(15, 17);
+                    $jamOutMinute = rand(0, 59);
+                    $jamOut = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date->format('Y-m-d') . ' ' . sprintf('%02d', $jamOutHour) . ':' . sprintf('%02d', $jamOutMinute) . ':00');
+
                     // Membuat presensi untuk pegawai pada tanggal tersebut
                     Presensi::create([
                         'pegawai_id' => $pegawai->nip,
                         'tgl_presensi' => $date->format('Y-m-d'),
-                        'jam_in' => $date->format('Y-m-d') . ' ' . \Carbon\Carbon::parse($date)->addHours(rand(8, 10))->addMinutes(rand(0, 59))->format('H:i:s'),
-                        'jam_out' => $date->format('Y-m-d') . ' ' . \Carbon\Carbon::parse($date)->addHours(rand(15, 18))->addMinutes(rand(0, 59))->format('H:i:s'),
+                        'jam_in' => $jamIn->format('Y-m-d H:i:s'),
+                        'jam_out' => $jamOut->format('Y-m-d H:i:s'),
                         'foto_in' => null,
                         'foto_out' => null,
                         'lokasi_in' => '-3.3343281,114.5927959',

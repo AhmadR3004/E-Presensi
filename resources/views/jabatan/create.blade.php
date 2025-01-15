@@ -23,23 +23,55 @@
                 @csrf
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
-                        <label for="nama_jabatan"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Jabatan</label>
-                        <div class="relative">
-                            <input type="text" name="nama_jabatan" id="nama_jabatan"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Nama Jabatan" required>
-                            <small id="jabatan-alert"
-                                class="text-red-500 absolute right-2 top-1/2 transform -translate-y-1/2 hidden">
-                                Nama jabatan sudah ada!</small>
-                        </div>
+                        <label for="kode_jabatan" class="block mb-2 text-sm font-medium text-gray-900">Kode
+                            Jabatan</label>
+                        <input type="text" name="kode_jabatan" id="kode_jabatan"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Kode Jabatan" required>
                     </div>
+
                     <div>
-                        <label for="deskripsi"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                        <textarea name="deskripsi" id="deskripsi" rows="4"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="Masukkan deskripsi jabatan" required></textarea>
+                        <label for="nama_jabatan" class="block mb-2 text-sm font-medium text-gray-900">Nama
+                            Jabatan</label>
+                        <input type="text" name="nama_jabatan" id="nama_jabatan"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Nama Jabatan" required>
+                    </div>
+
+                    <div>
+                        <label for="pangkat" class="block mb-2 text-sm font-medium text-gray-900">Pangkat</label>
+                        <input type="text" name="pangkat" id="pangkat"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Pangkat" required>
+                    </div>
+
+                    <div>
+                        <label for="departemen" class="block mb-2 text-sm font-medium text-gray-900">Departemen</label>
+                        <input type="text" name="departemen" id="departemen"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Departemen" required>
+                    </div>
+
+                    <div>
+                        <label for="tingkat_jabatan" class="block mb-2 text-sm font-medium text-gray-900">Tingkat
+                            Jabatan</label>
+                        <input type="text" name="tingkat_jabatan" id="tingkat_jabatan"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Tingkat Jabatan" required>
+                    </div>
+
+                    <div>
+                        <label for="gaji_pokok" class="block mb-2 text-sm font-medium text-gray-900">Gaji Pokok</label>
+                        <input type="number" name="gaji_pokok" id="gaji_pokok"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Gaji Pokok" step="0.01" required>
+                    </div>
+
+                    <div>
+                        <label for="tunjangan" class="block mb-2 text-sm font-medium text-gray-900">Tunjangan</label>
+                        <input type="number" name="tunjangan" id="tunjangan"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Tunjangan" step="0.01">
                     </div>
                 </div>
                 <div class="items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">

@@ -19,8 +19,8 @@ class PresensiFactory extends Factory
         // Ambil pegawai secara acak
         $pegawai = Pegawai::all()->random();
 
-        // Tentukan rentang tanggal presensi dari November 2024 hingga sekarang
-        $startDate = Carbon::createFromDate(2024, 11, 1); // Mulai dari November 2024
+        // Tentukan rentang tanggal presensi dari Desember 2024 hingga sekarang
+        $startDate = Carbon::createFromDate(2024, 12, 1); // Mulai dari Desember 2024
         $endDate = Carbon::now(); // Sampai tanggal sekarang
 
         // Loop melalui setiap hari kerja (Senin sampai Jumat)
@@ -35,9 +35,9 @@ class PresensiFactory extends Factory
         // Pilih secara acak satu tanggal presensi
         $tgl_presensi = $this->faker->randomElement($presensiDates);
 
-        // Tentukan jam masuk dan keluar
+        // Tentukan jam masuk (antara jam 8 hingga 10) dan keluar (antara jam 15 hingga 17)
         $jam_in = Carbon::parse($tgl_presensi . ' ' . $this->faker->numberBetween(8, 10) . ':' . $this->faker->numberBetween(0, 59))->format('H:i:s');
-        $jam_out = Carbon::parse($tgl_presensi . ' ' . $this->faker->numberBetween(15, 18) . ':' . $this->faker->numberBetween(0, 59))->format('H:i:s');
+        $jam_out = Carbon::parse($tgl_presensi . ' ' . $this->faker->numberBetween(15, 17) . ':' . $this->faker->numberBetween(0, 59))->format('H:i:s');
 
         return [
             'pegawai_id' => $pegawai->nip,
