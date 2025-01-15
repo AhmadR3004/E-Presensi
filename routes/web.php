@@ -95,7 +95,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/rekap-presensi', [PresensiController::class, 'laporanRekapPresensi'])->name('laporan.rekap-presensi');
 
     Route::post('/laporan/cetak/presensi', [PresensiController::class, 'cetakPresensi'])->name('laporan.cetakpresensi');
-    Route::post('/laporan/cetak/rekap', [PresensiController::class, 'cetakRekap'])->name('laporan.cetakrekap');
+    Route::post('/laporan/cetak/rekap-presensi', [PresensiController::class, 'cetakRekapPresensi'])->name('laporan.cetakrekap-presensi');
+
+    Route::get('/laporan/izinsakit', [PresensiController::class, 'laporanIzinsakit'])->name('laporan.izinsakit');
+    Route::get('/laporan/rekap-izinsakit', [PresensiController::class, 'laporanRekapIzinsakit'])->name('laporan.rekap-izinsakit');
+
+    Route::post('/laporan/cetak/izinsakit', [PresensiController::class, 'cetakIzinSakit'])->name('laporan.cetakizinsakit');
+    Route::post('/laporan/cetak/rekap-izinsakit', [PresensiController::class, 'cetakRekapIzinsakit'])->name('laporan.cetakrekap-izinsakit');
 
     Route::get('/konfigurasi/lokasikantor', [KonfigurasiController::class, 'lokasikantor'])->name('konfigurasi.lokasikantor');
     Route::post('/konfigurasi/updatelokasikantor', [KonfigurasiController::class, 'updatelokasikantor'])->name('konfigurasi.updatelokasikantor');

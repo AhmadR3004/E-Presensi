@@ -308,7 +308,7 @@ class PresensiController extends Controller
         return view('laporan.rekap-presensi', compact('namabulan'));
     }
 
-    public function cetakRekap(Request $request)
+    public function cetakRekapPresensi(Request $request)
     {
         $bulan = $request->bulan;
         $tahun = $request->tahun;
@@ -429,5 +429,130 @@ class PresensiController extends Controller
 
         $cek = DB::table('izin_sakit')->where('pegawai_id', $nip)->where('tgl_izin', $tgl_izin)->count();
         return $cek;
+    }
+
+    public function laporanIzinsakit()
+    {
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $pegawai = DB::table('pegawai')->orderBy('nama')->get();
+        return view('laporan.izinsakit', compact('namabulan', 'pegawai'));
+    }
+
+    public function cetakIzinSakit(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $nip = $request->nip;
+
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        // Mengambil data pegawai berdasarkan NIP
+        $pegawai = DB::table('pegawai')->where('nip', $nip)
+            ->select('nama', 'jabatan_id', 'no_telp', 'foto')
+            ->first();
+
+        // Mengambil jabatan pegawai
+        $jabatan = DB::table('jabatan')->where('id', $pegawai->jabatan_id)
+            ->select('nama_jabatan')
+            ->first();
+
+        // Mengambil data izin sakit berdasarkan NIP, bulan, dan tahun
+        $izinSakit = DB::table('izin_sakit')
+            ->where('pegawai_id', $nip)
+            ->whereRaw('MONTH(tgl_izin) ="' . $bulan . '"')
+            ->whereRaw('YEAR(tgl_izin) ="' . $tahun . '"')
+            ->orderBy('tgl_izin')
+            ->get();
+
+        return view('laporan.cetak.izinsakit', compact('izinSakit', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namabulan'));
+    }
+
+    public function laporanRekapIzinsakit()
+    {
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        return view('laporan.rekap-izinsakit', compact('namabulan'));
+    }
+
+    public function cetakRekapIzinsakit(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        // Query untuk mengambil data izin sakit berdasarkan bulan dan tahun
+        $rekap = DB::table('izin_sakit')
+            ->selectRaw('
+            pegawai.nip as pegawai_id, 
+            pegawai.nama,
+            MAX(IF(DAY(tgl_izin) = 1, status, "")) AS tgl_1,
+            MAX(IF(DAY(tgl_izin) = 2, status, "")) AS tgl_2,
+            MAX(IF(DAY(tgl_izin) = 3, status, "")) AS tgl_3,
+            MAX(IF(DAY(tgl_izin) = 4, status, "")) AS tgl_4,
+            MAX(IF(DAY(tgl_izin) = 5, status, "")) AS tgl_5,
+            MAX(IF(DAY(tgl_izin) = 6, status, "")) AS tgl_6,
+            MAX(IF(DAY(tgl_izin) = 7, status, "")) AS tgl_7,
+            MAX(IF(DAY(tgl_izin) = 8, status, "")) AS tgl_8,
+            MAX(IF(DAY(tgl_izin) = 9, status, "")) AS tgl_9,
+            MAX(IF(DAY(tgl_izin) = 10, status, "")) AS tgl_10,
+            MAX(IF(DAY(tgl_izin) = 11, status, "")) AS tgl_11,
+            MAX(IF(DAY(tgl_izin) = 12, status, "")) AS tgl_12,
+            MAX(IF(DAY(tgl_izin) = 13, status, "")) AS tgl_13,
+            MAX(IF(DAY(tgl_izin) = 14, status, "")) AS tgl_14,
+            MAX(IF(DAY(tgl_izin) = 15, status, "")) AS tgl_15,
+            MAX(IF(DAY(tgl_izin) = 16, status, "")) AS tgl_16,
+            MAX(IF(DAY(tgl_izin) = 17, status, "")) AS tgl_17,
+            MAX(IF(DAY(tgl_izin) = 18, status, "")) AS tgl_18,
+            MAX(IF(DAY(tgl_izin) = 19, status, "")) AS tgl_19,
+            MAX(IF(DAY(tgl_izin) = 20, status, "")) AS tgl_20,
+            MAX(IF(DAY(tgl_izin) = 21, status, "")) AS tgl_21,
+            MAX(IF(DAY(tgl_izin) = 22, status, "")) AS tgl_22,
+            MAX(IF(DAY(tgl_izin) = 23, status, "")) AS tgl_23,
+            MAX(IF(DAY(tgl_izin) = 24, status, "")) AS tgl_24,
+            MAX(IF(DAY(tgl_izin) = 25, status, "")) AS tgl_25,
+            MAX(IF(DAY(tgl_izin) = 26, status, "")) AS tgl_26,
+            MAX(IF(DAY(tgl_izin) = 27, status, "")) AS tgl_27,
+            MAX(IF(DAY(tgl_izin) = 28, status, "")) AS tgl_28,
+            MAX(IF(DAY(tgl_izin) = 29, status, "")) AS tgl_29,
+            MAX(IF(DAY(tgl_izin) = 30, status, "")) AS tgl_30,
+            MAX(IF(DAY(tgl_izin) = 31, status, "")) AS tgl_31,
+            MAX(IF(DAY(tgl_izin) = 1, status_approved, "")) AS status_approved_1,
+            MAX(IF(DAY(tgl_izin) = 2, status_approved, "")) AS status_approved_2,
+            MAX(IF(DAY(tgl_izin) = 3, status_approved, "")) AS status_approved_3,
+            MAX(IF(DAY(tgl_izin) = 4, status_approved, "")) AS status_approved_4,
+            MAX(IF(DAY(tgl_izin) = 5, status_approved, "")) AS status_approved_5,
+            MAX(IF(DAY(tgl_izin) = 6, status_approved, "")) AS status_approved_6,
+            MAX(IF(DAY(tgl_izin) = 7, status_approved, "")) AS status_approved_7,
+            MAX(IF(DAY(tgl_izin) = 8, status_approved, "")) AS status_approved_8,
+            MAX(IF(DAY(tgl_izin) = 9, status_approved, "")) AS status_approved_9,
+            MAX(IF(DAY(tgl_izin) = 10, status_approved, "")) AS status_approved_10,
+            MAX(IF(DAY(tgl_izin) = 11, status_approved, "")) AS status_approved_11,
+            MAX(IF(DAY(tgl_izin) = 12, status_approved, "")) AS status_approved_12,
+            MAX(IF(DAY(tgl_izin) = 13, status_approved, "")) AS status_approved_13,
+            MAX(IF(DAY(tgl_izin) = 14, status_approved, "")) AS status_approved_14,
+            MAX(IF(DAY(tgl_izin) = 15, status_approved, "")) AS status_approved_15,
+            MAX(IF(DAY(tgl_izin) = 16, status_approved, "")) AS status_approved_16,
+            MAX(IF(DAY(tgl_izin) = 17, status_approved, "")) AS status_approved_17,
+            MAX(IF(DAY(tgl_izin) = 18, status_approved, "")) AS status_approved_18,
+            MAX(IF(DAY(tgl_izin) = 19, status_approved, "")) AS status_approved_19,
+            MAX(IF(DAY(tgl_izin) = 20, status_approved, "")) AS status_approved_20,
+            MAX(IF(DAY(tgl_izin) = 21, status_approved, "")) AS status_approved_21,
+            MAX(IF(DAY(tgl_izin) = 22, status_approved, "")) AS status_approved_22,
+            MAX(IF(DAY(tgl_izin) = 23, status_approved, "")) AS status_approved_23,
+            MAX(IF(DAY(tgl_izin) = 24, status_approved, "")) AS status_approved_24,
+            MAX(IF(DAY(tgl_izin) = 25, status_approved, "")) AS status_approved_25,
+            MAX(IF(DAY(tgl_izin) = 26, status_approved, "")) AS status_approved_26,
+            MAX(IF(DAY(tgl_izin) = 27, status_approved, "")) AS status_approved_27,
+            MAX(IF(DAY(tgl_izin) = 28, status_approved, "")) AS status_approved_28,
+            MAX(IF(DAY(tgl_izin) = 29, status_approved, "")) AS status_approved_29,
+            MAX(IF(DAY(tgl_izin) = 30, status_approved, "")) AS status_approved_30,
+            MAX(IF(DAY(tgl_izin) = 31, status_approved, "")) AS status_approved_31
+        ')
+            ->join('pegawai', 'izin_sakit.pegawai_id', '=', 'pegawai.nip')
+            ->whereMonth('tgl_izin', $bulan)
+            ->whereYear('tgl_izin', $tahun)
+            ->groupByRaw('izin_sakit.pegawai_id, pegawai.nama')
+            ->get();
+
+        return view('laporan.cetak.rekapizinsakit', compact('rekap', 'bulan', 'tahun', 'namabulan'));
     }
 }

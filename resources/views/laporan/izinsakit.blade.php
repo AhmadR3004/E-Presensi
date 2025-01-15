@@ -8,7 +8,7 @@
                         <div
                             class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div class="flex-1 flex items-center space-x-2">
-                                <h1 class="dark:text-white"><b>Laporan Rekap Presensi</b></h1>
+                                <h1 class="dark:text-white"><b>Laporan Izin Sakit</b></h1>
                                 <div id="results-tooltip" role="tooltip"
                                     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                                     <div class="tooltip-arrow" data-popper-arrow=""></div>
@@ -18,8 +18,8 @@
                         <div
                             class="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 py-4 border-t dark:border-gray-700">
                             <div class="w-full md:w-1/2">
-                                <form action="{{ route('laporan.cetakrekap-presensi') }}" target="_blank"
-                                    class="flex flex-col space-y-4" method="POST">
+                                <form action="{{ route('laporan.cetakizinsakit') }}" target="_blank"
+                                    class="flex flex-col space-y-4" method="POST" onsubmit="return validateForm()">
                                     @csrf
                                     <!-- Dropdown for Month -->
                                     <select name="bulan"
@@ -44,6 +44,15 @@
                                                 {{ date('Y') == $tahun ? 'selected' : '' }}>
                                                 {{ $tahun }}</option>
                                         @endfor
+                                    </select>
+
+                                    <!-- Dropdown for Employee (Pegawai) -->
+                                    <select name="nip" id="nip"
+                                        class="form-select block w-full py-2 px-3 text-sm border rounded-md focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                                        <option value="">Pilih Pegawai</option>
+                                        @foreach ($pegawai as $d)
+                                            <option value="{{ $d->nip }}">{{ $d->nama }}</option>
+                                        @endforeach
                                     </select>
 
                                     <div class="flex space-x-2">
@@ -75,4 +84,20 @@
             </section>
         </div>
     </div>
+
+    <script>
+        function validateForm() {
+            const nip = document.getElementById("nip").value;
+            if (!nip) {
+                Swal.fire({
+                    title: 'Peringatan',
+                    text: 'Harap pilih pegawai terlebih dahulu!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return false; // Prevent form submission
+            }
+            return true;
+        }
+    </script>
 </x-app-layout>
