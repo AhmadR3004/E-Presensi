@@ -158,7 +158,7 @@
 <!-- Modal -->
 <div id="modal-izinsakit" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
     <div
-        class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md transform transition-all duration-300 scale-95 hover:scale-100">
+        class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md transform transition-all duration-300 scale-95">
         <div class="flex justify-between items-center border-b pb-4">
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Izin/Sakit</h3>
             <button id="closeModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-white text-2xl">

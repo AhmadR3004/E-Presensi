@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Laporan E-Presensi Pegawai</title>
+    <title>Laporan Rekap E-Presensi Pegawai Bulan {{ $bulan }}-{{ $tahun }}</title>
 
     <!-- Normalize or reset CSS with your favorite library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
@@ -15,7 +15,15 @@
     <!-- Set also "landscape" if you need -->
     <style>
         @page {
-            size: A4
+            size: A3 landscape;
+            margin: 5mm;
+            /* Mengurangi margin */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         .header-line {
@@ -26,31 +34,43 @@
         .tabelpresensi {
             border-collapse: collapse;
             width: 100%;
-            margin top: 20px;
+            margin-top: 10px;
         }
 
-        .tabelpresensi tr th {
-            border: 1px solid black;
-            padding: 8px;
-            background: #dbdbdb;
-            font-size: 10px;
-        }
-
+        .tabelpresensi tr th,
         .tabelpresensi td {
             border: 1px solid black;
             padding: 5px;
             font-size: 10px;
         }
+
+        .sheet {
+            padding: 5mm;
+            /* Mengurangi padding */
+        }
+
+        table {
+            page-break-inside: avoid;
+            /* Mencegah tabel terpotong */
+        }
+
+        /* Hindari halaman kosong */
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
     </style>
+
+    <script>
+        window.onload = function() {
+            window.print();
+        }
+    </script>
 </head>
 
-<!-- Set "A5", "A4" or "A3" for class name -->
-<!-- Set also "landscape" if you need -->
+<body class="A3 landscape">
 
-<body class="A4 landscape">
-
-    <!-- Each sheet element should have the class "sheet" -->
-    <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
     <section class="sheet padding-10mm">
 
         <table style="width: 100%;">
@@ -73,7 +93,25 @@
         <div style="text-align: right; margin-top: 10px;">Banjarmasin, {{ date('j F Y') }}</div>
 
         <div style="text-align: center;">
-            <h3>LAPORAN REKAP E-PRESENSI PEGAWAI</h3>
+            <h2>Laporan Rekap E-PRESENSI Pegawai Bulan
+                @php
+                    $namaBulan = [
+                        '1' => 'Januari',
+                        '2' => 'Februari',
+                        '3' => 'Maret',
+                        '4' => 'April',
+                        '5' => 'Mei',
+                        '6' => 'Juni',
+                        '7' => 'Juli',
+                        '8' => 'Agustus',
+                        '9' => 'September',
+                        '10' => 'Oktober',
+                        '11' => 'November',
+                        '12' => 'Desember',
+                    ];
+                @endphp
+                {{ $namaBulan[$bulan] }} {{ $tahun }}
+            </h2>
         </div>
 
         <table class="tabelpresensi">
@@ -126,7 +164,11 @@
             @endforeach
         </table>
 
-        <table width="100%" style="margin-top: 100px">
+        <div style="text-align: right; margin-top: 20px; font-size: 10px; color: red;">
+            <i>*TH = Total Hadir, TT = Total Terlambat</i>
+        </div>
+
+        <table width="100%">
             <tr>
                 <td style="text-align: center; vertical-align: bottom; height: 100px">
                     <p>KEPALA DINAS</p><br>

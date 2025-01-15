@@ -19,7 +19,7 @@
                             class="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 py-4 border-t dark:border-gray-700">
                             <div class="w-full md:w-1/2">
                                 <form action="{{ route('laporan.cetakpresensi') }}" target="_blank"
-                                    class="flex flex-col space-y-4" method="POST">
+                                    class="flex flex-col space-y-4" method="POST" onsubmit="return validateForm()">
                                     @csrf
                                     <!-- Dropdown for Month -->
                                     <select name="bulan"
@@ -47,7 +47,7 @@
                                     </select>
 
                                     <!-- Dropdown for Employee (Pegawai) -->
-                                    <select name="nip"
+                                    <select name="nip" id="nip"
                                         class="form-select block w-full py-2 px-3 text-sm border rounded-md focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600">
                                         <option value="">Pilih Pegawai</option>
                                         @foreach ($pegawai as $d)
@@ -84,4 +84,20 @@
             </section>
         </div>
     </div>
+
+    <script>
+        function validateForm() {
+            const nip = document.getElementById("nip").value;
+            if (!nip) {
+                Swal.fire({
+                    title: 'Peringatan',
+                    text: 'Harap pilih pegawai terlebih dahulu!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return false; // Prevent form submission
+            }
+            return true;
+        }
+    </script>
 </x-app-layout>
