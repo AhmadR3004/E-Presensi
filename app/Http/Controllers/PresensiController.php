@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use App\Models\KonfigurasiLokasi;
 
 use function Ramsey\Uuid\v1;
 
@@ -258,15 +262,18 @@ class PresensiController extends Controller
 
     public function monitoring(Request $request)
     {
-        // Cek apakah ada parameter tanggal yang dipilih
-        $date = $request->input('date', Carbon::now()->format('Y-m-d'));  // Default ke tanggal hari ini jika tidak ada filter
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
 
-        // Ambil data presensi berdasarkan tanggal yang dipilih
-        $presensi = Presensi::whereDate('tgl_presensi', $date)  // Gantilah 'tgl_presensi' dengan kolom yang sesuai di tabel presensi
-            ->with('pegawai.jabatan')  // Memuat relasi pegawai dan jabatan
+        // Ambil data presensi pada tanggal yang diberikan
+        $presensi = Presensi::whereDate('tgl_presensi', $date)
+            ->with('pegawai.jabatan')
             ->get();
 
-        return view('presensi.monitoring', compact('presensi', 'date'));
+        // Ambil data lokasi kantor menggunakan query builder
+        $lokasiKantor = DB::table('konfigurasi_lokasi')->where('id', 1)->first();
+
+        // Pastikan mengirimkan lokasi_kantor ke view
+        return view('presensi.monitoring', compact('presensi', 'date', 'lokasiKantor'));
     }
 
     public function laporanPresensi()
@@ -284,14 +291,17 @@ class PresensiController extends Controller
 
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
+        // Mendapatkan data pegawai
         $pegawai = DB::table('pegawai')->where('nip', $nip)
             ->select('nama', 'jabatan_id', 'no_telp', 'foto')
             ->first();
 
+        // Mendapatkan data jabatan
         $jabatan = DB::table('jabatan')->where('id', $pegawai->jabatan_id)
             ->select('nama_jabatan')
             ->first();
 
+        // Mendapatkan data presensi
         $presensi = DB::table('presensi')
             ->where('pegawai_id', $nip)
             ->whereRaw('MONTH(tgl_presensi) ="' . $bulan . '"')
@@ -299,8 +309,13 @@ class PresensiController extends Controller
             ->orderBy('tgl_presensi')
             ->get();
 
-        return view('laporan.cetak.presensi', compact('presensi', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namabulan'));
+        // Load view untuk laporan presensi
+        $pdf = PDF::loadView('laporan.cetak.presensi', compact('presensi', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namabulan'));
+
+        // Stream PDF ke browser
+        return $pdf->stream('Laporan_Presensi_' . $pegawai->nama . '_' . $namabulan[$bulan] . '_' . $tahun . '.pdf');
     }
+
 
     public function laporanRekapPresensi()
     {
@@ -316,38 +331,38 @@ class PresensiController extends Controller
 
         $rekap = DB::table('presensi')
             ->selectRaw('
-            presensi.pegawai_id, pegawai.nama,
-            MAX(IF(DAY(tgl_presensi) = 1, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_1,
-            MAX(IF(DAY(tgl_presensi) = 2, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_2,
-            MAX(IF(DAY(tgl_presensi) = 3, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_3,
-            MAX(IF(DAY(tgl_presensi) = 4, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_4,
-            MAX(IF(DAY(tgl_presensi) = 5, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_5,
-            MAX(IF(DAY(tgl_presensi) = 6, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_6,
-            MAX(IF(DAY(tgl_presensi) = 7, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_7,
-            MAX(IF(DAY(tgl_presensi) = 8, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_8,
-            MAX(IF(DAY(tgl_presensi) = 9, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_9,
-            MAX(IF(DAY(tgl_presensi) = 10, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_10,
-            MAX(IF(DAY(tgl_presensi) = 11, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_11,
-            MAX(IF(DAY(tgl_presensi) = 12, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_12,
-            MAX(IF(DAY(tgl_presensi) = 13, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_13,
-            MAX(IF(DAY(tgl_presensi) = 14, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_14,
-            MAX(IF(DAY(tgl_presensi) = 15, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_15,
-            MAX(IF(DAY(tgl_presensi) = 16, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_16,
-            MAX(IF(DAY(tgl_presensi) = 17, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_17,
-            MAX(IF(DAY(tgl_presensi) = 18, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_18,
-            MAX(IF(DAY(tgl_presensi) = 19, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_19,
-            MAX(IF(DAY(tgl_presensi) = 20, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_20,
-            MAX(IF(DAY(tgl_presensi) = 21, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_21,
-            MAX(IF(DAY(tgl_presensi) = 22, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_22,
-            MAX(IF(DAY(tgl_presensi) = 23, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_23,
-            MAX(IF(DAY(tgl_presensi) = 24, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_24,
-            MAX(IF(DAY(tgl_presensi) = 25, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_25,
-            MAX(IF(DAY(tgl_presensi) = 26, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_26,
-            MAX(IF(DAY(tgl_presensi) = 27, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_27,
-            MAX(IF(DAY(tgl_presensi) = 28, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_28,
-            MAX(IF(DAY(tgl_presensi) = 29, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_29,
-            MAX(IF(DAY(tgl_presensi) = 30, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_30,
-            MAX(IF(DAY(tgl_presensi) = 31, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_31
+        presensi.pegawai_id, pegawai.nama,
+        MAX(IF(DAY(tgl_presensi) = 1, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_1,
+        MAX(IF(DAY(tgl_presensi) = 2, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_2,
+        MAX(IF(DAY(tgl_presensi) = 3, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_3,
+        MAX(IF(DAY(tgl_presensi) = 4, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_4,
+        MAX(IF(DAY(tgl_presensi) = 5, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_5,
+        MAX(IF(DAY(tgl_presensi) = 6, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_6,
+        MAX(IF(DAY(tgl_presensi) = 7, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_7,
+        MAX(IF(DAY(tgl_presensi) = 8, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_8,
+        MAX(IF(DAY(tgl_presensi) = 9, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_9,
+        MAX(IF(DAY(tgl_presensi) = 10, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_10,
+        MAX(IF(DAY(tgl_presensi) = 11, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_11,
+        MAX(IF(DAY(tgl_presensi) = 12, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_12,
+        MAX(IF(DAY(tgl_presensi) = 13, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_13,
+        MAX(IF(DAY(tgl_presensi) = 14, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_14,
+        MAX(IF(DAY(tgl_presensi) = 15, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_15,
+        MAX(IF(DAY(tgl_presensi) = 16, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_16,
+        MAX(IF(DAY(tgl_presensi) = 17, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_17,
+        MAX(IF(DAY(tgl_presensi) = 18, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_18,
+        MAX(IF(DAY(tgl_presensi) = 19, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_19,
+        MAX(IF(DAY(tgl_presensi) = 20, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_20,
+        MAX(IF(DAY(tgl_presensi) = 21, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_21,
+        MAX(IF(DAY(tgl_presensi) = 22, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_22,
+        MAX(IF(DAY(tgl_presensi) = 23, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_23,
+        MAX(IF(DAY(tgl_presensi) = 24, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_24,
+        MAX(IF(DAY(tgl_presensi) = 25, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_25,
+        MAX(IF(DAY(tgl_presensi) = 26, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_26,
+        MAX(IF(DAY(tgl_presensi) = 27, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_27,
+        MAX(IF(DAY(tgl_presensi) = 28, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_28,
+        MAX(IF(DAY(tgl_presensi) = 29, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_29,
+        MAX(IF(DAY(tgl_presensi) = 30, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_30,
+        MAX(IF(DAY(tgl_presensi) = 31, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")), "")) AS tgl_31
         ')
             ->join('pegawai', 'presensi.pegawai_id', '=', 'pegawai.nip')
             ->whereMonth('tgl_presensi', $bulan)
@@ -355,7 +370,17 @@ class PresensiController extends Controller
             ->groupByRaw('presensi.pegawai_id, pegawai.nama')
             ->get();
 
-        return view('laporan.cetak.rekappresensi', compact('rekap', 'bulan', 'tahun', 'namabulan'));
+        // Mengonfigurasi DOMPDF
+        $dompdfOptions = new Options();
+        $dompdfOptions->set('isHtml5ParserEnabled', true);
+        $dompdfOptions->set('isPhpEnabled', true);
+        $dompdf = new Dompdf($dompdfOptions);
+
+        // Load view untuk laporan rekap presensi
+        $pdf = PDF::loadView('laporan.cetak.rekappresensi', compact('rekap', 'bulan', 'tahun', 'namabulan'));
+
+        // Stream PDF ke browser (bukan diunduh)
+        return $pdf->stream('Rekap_Presensi_' . $namabulan[$bulan] . '_' . $tahun . '.pdf');
     }
 
     public function dataizinsakit(Request $request)
@@ -459,12 +484,38 @@ class PresensiController extends Controller
         // Mengambil data izin sakit berdasarkan NIP, bulan, dan tahun
         $izinSakit = DB::table('izin_sakit')
             ->where('pegawai_id', $nip)
-            ->whereRaw('MONTH(tgl_izin) ="' . $bulan . '"')
-            ->whereRaw('YEAR(tgl_izin) ="' . $tahun . '"')
+            ->whereRaw('MONTH(tgl_izin) = ?', [$bulan])
+            ->whereRaw('YEAR(tgl_izin) = ?', [$tahun])
             ->orderBy('tgl_izin')
             ->get();
 
-        return view('laporan.cetak.izinsakit', compact('izinSakit', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namabulan'));
+        // Mengonfigurasi DOMPDF
+        $dompdfOptions = new Options();
+        $dompdfOptions->set('isHtml5ParserEnabled', true);
+        $dompdfOptions->set('isPhpEnabled', true);
+        $dompdf = new Dompdf($dompdfOptions);
+
+        // Menyiapkan data yang akan diteruskan ke view
+        $namaBulan = [
+            '1' => 'Januari',
+            '2' => 'Februari',
+            '3' => 'Maret',
+            '4' => 'April',
+            '5' => 'Mei',
+            '6' => 'Juni',
+            '7' => 'Juli',
+            '8' => 'Agustus',
+            '9' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember',
+        ];
+
+        // Load view untuk laporan izin sakit
+        $pdf = PDF::loadView('laporan.cetak.izinsakit', compact('izinSakit', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namaBulan'));
+
+        // Stream PDF ke browser (bukan diunduh)
+        return $pdf->stream('Laporan_Izin_Sakit_' . $namaBulan[$bulan] . '_' . $tahun . '.pdf');
     }
 
     public function laporanRekapIzinsakit()
@@ -553,6 +604,65 @@ class PresensiController extends Controller
             ->groupByRaw('izin_sakit.pegawai_id, pegawai.nama')
             ->get();
 
-        return view('laporan.cetak.rekapizinsakit', compact('rekap', 'bulan', 'tahun', 'namabulan'));
+        // Mengonfigurasi DOMPDF
+        $dompdfOptions = new Options();
+        $dompdfOptions->set('isHtml5ParserEnabled', true);
+        $dompdfOptions->set('isPhpEnabled', true);
+        $dompdf = new Dompdf($dompdfOptions);
+
+        // Load view untuk laporan rekap presensi
+        $pdf = PDF::loadView('laporan.cetak.rekapizinsakit', compact('rekap', 'bulan', 'tahun', 'namabulan'));
+
+        // Stream PDF ke browser (bukan diunduh)
+        return $pdf->stream('Rekap_Izin_Sakit_' . $namabulan[$bulan] . '_' . $tahun . '.pdf');
+    }
+
+    public function laporanPegawai()
+    {
+        $jabatan = DB::table('jabatan')->orderBy('nama_jabatan')->get();
+        return view('laporan.pegawai', compact('jabatan'));
+    }
+
+    public function cetakPegawai(Request $request)
+    {
+        // Mendapatkan jabatan_id dari request
+        $jabatan_id = $request->jabatan;
+
+        // Query untuk mengambil data pegawai beserta jabatan
+        $pegawai = DB::table('pegawai')
+            ->leftJoin('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->select(
+                'pegawai.nip',
+                'pegawai.nama',
+                'pegawai.jabatan_id',
+                'pegawai.no_telp',
+                'pegawai.foto',
+                'pegawai.alamat',
+                'pegawai.tanggal_lahir',
+                'pegawai.email',
+                'pegawai.tanggal_masuk',
+                'pegawai.jenis_kelamin',
+                'jabatan.nama_jabatan as jabatan_nama',
+                'jabatan.kode_jabatan',
+                'jabatan.pangkat',
+                'jabatan.departemen',
+                'jabatan.tingkat_jabatan',
+                'jabatan.gaji_pokok',
+                'jabatan.tunjangan'
+            )
+            ->when($jabatan_id, function ($query) use ($jabatan_id) {
+                return $query->where('pegawai.jabatan_id', $jabatan_id);
+            })
+            ->get();
+
+        // Jika jabatan_id ada, ambil jabatan untuk ditampilkan
+        $jabatan = null;
+        if ($jabatan_id) {
+            $jabatan = DB::table('jabatan')->where('id', $jabatan_id)->first();
+        }
+
+        // Preview PDF sebelum download
+        $pdf = Pdf::loadView('laporan.cetak.pegawai', compact('pegawai', 'jabatan', 'jabatan_id'));
+        return $pdf->stream('laporan-pegawai.pdf');
     }
 }

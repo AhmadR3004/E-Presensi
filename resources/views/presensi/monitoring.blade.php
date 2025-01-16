@@ -146,35 +146,101 @@
     @include('presensi.showmap')
 
     <script>
+        let mapInstance; // Peta global
+        let marker; // Marker global
+        let circle; // Circle global
+
         document.querySelectorAll('[data-modal-toggle]').forEach(function(button) {
             button.addEventListener('click', function() {
                 const modal = document.getElementById(button.getAttribute('data-modal-toggle'));
-                modal.classList.toggle('hidden');
+                const lokasiIn = button.getAttribute('data-lokasi-in');
+                const pegawaiNama = button.getAttribute('data-pegawai-nama');
+
+                const [latitude, longitude] = lokasiIn.split(',').map(coord => parseFloat(coord.trim()));
+
+                // Lokasi kantor (gunakan nilai lokasi kantor dari backend atau data yang tersedia)
+                const lokasiKantor = "{{ $lokasiKantor->lokasi_kantor }}"; // Pastikan ini ada dan valid
+                const radiusKantor = "{{ $lokasiKantor->radius }}"; // Pastikan ini ada dan valid
+
+                const [latitudeKan, longitudeKan] = lokasiKantor.split(',').map(coord => parseFloat(coord
+                    .trim()));
+
+                // Menampilkan nama pegawai
+                document.getElementById('pegawaiNameHeader').textContent = pegawaiNama;
+
+                // Tampilkan modal
+                modal.classList.remove('hidden');
+
+                // Cek apakah peta sudah diinisialisasi sebelumnya
+                if (!mapInstance) {
+                    mapInstance = L.map('map').setView([latitude, longitude], 20);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(mapInstance);
+
+                    // Tambahkan marker pertama kali
+                    marker = L.marker([latitude, longitude]).addTo(mapInstance)
+                        .bindPopup(`<b>${pegawaiNama}</b>`)
+                        .openPopup();
+
+                    // Pastikan radiusKantor adalah angka dan valid
+                    const radius = isNaN(radiusKantor) ? 100 : parseInt(radiusKantor);
+                    console.log('Radius Kantor:', radius);
+
+                    // Tambahkan circle pertama kali jika radius valid
+                    circle = L.circle([latitudeKan, longitudeKan], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.3,
+                        radius: radius
+                    }).addTo(mapInstance);
+                } else {
+                    // Update posisi marker dan view peta
+                    mapInstance.setView([latitude, longitude], 20);
+                    marker.setLatLng([latitude, longitude]);
+                    marker.bindPopup(`<b>${pegawaiNama}</b>`).openPopup();
+
+                    // Update circle jika sudah ada
+                    circle.setLatLng([latitudeKan, longitudeKan]);
+                    const radius = isNaN(radiusKantor) ? 100 : parseInt(radiusKantor);
+                    circle.setRadius(radius);
+                }
+
+                // Tambahkan close handler untuk mereset modal
+                modal.querySelector('[data-modal-toggle]').addEventListener('click', function() {
+                    modal.classList.add('hidden');
+                });
             });
         });
     </script>
+
     <script>
+        // Memastikan variabel $lokasi_kantor tersedia dan dapat diakses di dalam JavaScript
+        const lokasiKantor = "{{ $lokasiKantor->lokasi_kantor }}";
+        const radiusKantor = "{{ $lokasiKantor->radius }}";
+
         document.querySelectorAll('.showMap').forEach(function(button) {
             button.addEventListener('click', function() {
                 // Ambil data dari tombol
                 const lokasiIn = button.getAttribute('data-lokasi-in'); // Format: "latitude,longitude"
                 const pegawaiNama = button.getAttribute('data-pegawai-nama');
 
-                // Pisahkan latitude dan longitude
+                // Pisahkan latitude dan longitude untuk lokasi pegawai
                 const [latitude, longitude] = lokasiIn.split(',').map(coord => parseFloat(coord.trim()));
+                // Pisahkan latitude dan longitude untuk lokasi kantor
+                const [latitudeKan, longitudeKan] = lokasiKantor.split(',').map(coord => parseFloat(coord
+                    .trim()));
 
                 // Mengirimkan data ke modal
-                document.getElementById('pegawaiName').textContent = 'Lokasi Pegawai: ' +
-                    pegawaiNama; // Tampilkan nama pegawai di header
-                document.getElementById('pegawaiNameHeader').textContent = pegawaiNama; // Nama pegawai
+                document.getElementById('pegawaiName').textContent = 'Lokasi Pegawai: ' + pegawaiNama;
+                document.getElementById('pegawaiNameHeader').textContent = pegawaiNama;
 
                 // Menampilkan modal
                 const modal = document.getElementById('showMap');
                 modal.classList.remove('hidden');
 
                 // Inisialisasi peta menggunakan Leaflet.js
-                const map = L.map('map').setView([latitude, longitude],
-                    22); // Set peta dengan koordinat pegawai
+                const map = L.map('map').setView([latitude, longitude], 22);
 
                 // Tambahkan tile layer (misalnya OpenStreetMap)
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -186,12 +252,12 @@
                     .bindPopup(`<b>${pegawaiNama}</b>`)
                     .openPopup();
 
-                // Tambahkan circle radius di sekitar lokasi pegawai
-                const circle = L.circle([-3.334345495834711, 114.59274160520408], {
-                    color: 'red', // Warna border lingkaran
-                    fillColor: 'red', // Warna isi lingkaran
-                    fillOpacity: 0.2, // Opasitas isi lingkaran
-                    radius: 20 // Radius dalam meter
+                // Tambahkan circle radius di sekitar lokasi kantor
+                const circle = L.circle([latitudeKan, longitudeKan], {
+                    color: 'red',
+                    fillColor: 'red',
+                    fillOpacity: 0.2,
+                    radius: parseInt(radiusKantor)
                 }).addTo(map);
             });
         });

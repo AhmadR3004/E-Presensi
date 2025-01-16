@@ -81,6 +81,9 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <x-dropdown-link :href="route('laporan.pegawai')">
+                                {{ __('Pegawai') }}
+                            </x-dropdown-link>
                             <x-dropdown-link :href="route('laporan.presensi')">
                                 {{ __('Presensi') }}
                             </x-dropdown-link>

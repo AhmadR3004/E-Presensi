@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
     {
         // Create static admin user
         User::create([
-            'name' => 'Ahmad Rosyad',
-            'email' => 'ahmadrosyad3004@gmail.com',
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
             'password' => bcrypt('12345678'),
             'email_verified_at' => now(),
         ]);
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
             'nip' => '2110020078',
             'foto' => '2110020078.png',
             'nama' => 'Ahmad Rosyad',
-            'jabatan_id' => 6, // Jabatan ID untuk Staff Pelayanan
+            'jabatan_id' => 1, // Jabatan ID untuk Kepala Dinas
             'alamat' => 'JL.Kelayan B, Gg Setia rahman no.23',
             'no_telp' => '089692572431',
             'tanggal_lahir' => '2025-01-02',

@@ -10,7 +10,7 @@
     <style>
         @page {
             size: A4;
-            margin: 20mm;
+            margin: 10mm;
         }
 
         body {
@@ -73,13 +73,24 @@
         .new-page {
             page-break-before: always;
         }
-    </style>
 
-    <script>
-        window.onload = function() {
-            window.print();
+        .tabeltotal {
+            width: 100%;
+            margin-top: 20px;
+            font-size: 12px;
         }
-    </script>
+
+        .tabeltotal td {
+            padding: 5px;
+            text-align: left;
+        }
+
+        .footer-note {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 
 <body class="A4">
@@ -89,7 +100,8 @@
         <table style="width: 100%;">
             <tr>
                 <td style="width: 100px;">
-                    <img src="{{ asset('assets/img/login/logo.png') }}" width="85" height="100" alt="">
+                    <img src="{{ public_path('assets/img/login/logo.png') }}" width="85" height="110"
+                        alt="">
                 </td>
                 <td align="center">
                     <p style="margin-bottom: -1em; font-size: 18px">PEMERINTAH KOTA BANJARMASIN</p>
@@ -127,11 +139,11 @@
         <!-- Data Pegawai -->
         <table class="tabeldatapegawai">
             <tr>
-                <td rowspan="5">
+                <td rowspan="6">
                     @php
-                        $path = Storage::url('uploads/pegawai/' . $pegawai->foto);
+                        $path = public_path('storage/uploads/pegawai/' . $pegawai->foto);
                     @endphp
-                    <img src="{{ url($path) }}" width="120px" height="150" alt="">
+                    <img src="{{ $path }}" width="120px" height="150" alt="">
                 </td>
             </tr>
             <tr>
@@ -156,7 +168,7 @@
             </tr>
         </table>
 
-        <!-- Awal tabel presensi - hanya menampilkan 10 baris pertama -->
+        <!-- tabel presensi -->
         <table class="tabelpresensi">
             <thead>
                 <tr>
@@ -171,83 +183,67 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($presensi as $key => $d)
-                    @if ($key < 10)
-                        @php
-                            $path_in = Storage::url('uploads/absensi/' . $d->foto_in);
-                            $path_out = Storage::url('uploads/absensi/' . $d->foto_out);
-                            $cutOffTime = '09:00:00';
-                            $jamMasuk = strtotime($d->jam_in);
-                            $jamPulang = $d->jam_out != null ? strtotime($d->jam_out) : null;
-                            $batasAbsen = strtotime($cutOffTime);
-                            $terlambat = $jamMasuk > $batasAbsen;
-                            $selisihTerlambat = $terlambat ? gmdate('H:i:s', $jamMasuk - $batasAbsen) : '';
-                            $keterangan = $terlambat ? "Terlambat $selisihTerlambat" : 'Tepat Waktu';
-                            $jamKerja = $jamPulang ? gmdate('H:i:s', $jamPulang - $jamMasuk) : '-';
-                        @endphp
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ date('d-m-Y', strtotime($d->tgl_presensi)) }}</td>
-                            <td>{{ $d->jam_in }}</td>
-                            <td><img src="{{ url($path_in) }}" width="40" height="30" alt=""></td>
-                            <td>{{ $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</td>
-                            <td>
-                                @if ($d->jam_out != null)
-                                    <img src="{{ url($path_out) }}" width="40" height="30" alt="">
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td>{{ $keterangan }}</td>
-                            <td>{{ $jamKerja }}</td>
-                        </tr>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
-    </section>
+                @php
+                    $totalTerlambat = 0;
+                    $totalTepatWaktu = 0;
+                @endphp
+                @foreach ($presensi as $d)
+                    @php
+                        $path_in = Storage::url('uploads/absensi/' . $d->foto_in);
+                        $path_out = Storage::url('uploads/absensi/' . $d->foto_out);
+                        $cutOffTime = '09:00:00';
+                        $jamMasuk = strtotime($d->jam_in);
+                        $jamPulang = $d->jam_out != null ? strtotime($d->jam_out) : null;
+                        $batasAbsen = strtotime($cutOffTime);
+                        $terlambat = $jamMasuk > $batasAbsen;
+                        $selisihTerlambat = $terlambat ? gmdate('H:i:s', $jamMasuk - $batasAbsen) : '';
+                        $keterangan = $terlambat ? "Terlambat $selisihTerlambat" : 'Tepat Waktu';
+                        $jamKerja = $jamPulang ? gmdate('H:i:s', $jamPulang - $jamMasuk) : '-';
 
-    <!-- Halaman Kedua -->
-    <section class="sheet">
-        <!-- Lanjutan tabel presensi -->
-        <table class="tabelpresensi">
-            <tbody>
-                @foreach ($presensi as $key => $d)
-                    @if ($key >= 10)
-                        @php
-                            $path_in = Storage::url('uploads/absensi/' . $d->foto_in);
-                            $path_out = Storage::url('uploads/absensi/' . $d->foto_out);
-                            $cutOffTime = '09:00:00';
-                            $jamMasuk = strtotime($d->jam_in);
-                            $jamPulang = $d->jam_out != null ? strtotime($d->jam_out) : null;
-                            $batasAbsen = strtotime($cutOffTime);
-                            $terlambat = $jamMasuk > $batasAbsen;
-                            $selisihTerlambat = $terlambat ? gmdate('H:i:s', $jamMasuk - $batasAbsen) : '';
-                            $keterangan = $terlambat ? "Terlambat $selisihTerlambat" : 'Tepat Waktu';
-                            $jamKerja = $jamPulang ? gmdate('H:i:s', $jamPulang - $jamMasuk) : '-';
-                        @endphp
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ date('d-m-Y', strtotime($d->tgl_presensi)) }}</td>
-                            <td>{{ $d->jam_in }}</td>
-                            <td><img src="{{ url($path_in) }}" width="40" height="30" alt=""></td>
-                            <td>{{ $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</td>
-                            <td>
-                                @if ($d->jam_out != null)
-                                    <img src="{{ url($path_out) }}" width="40" height="30" alt="">
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td>{{ $keterangan }}</td>
-                            <td>{{ $jamKerja }}</td>
-                        </tr>
-                    @endif
+                        // Hitung total terlambat dan tepat waktu
+                        if ($terlambat) {
+                            $totalTerlambat++;
+                        } else {
+                            $totalTepatWaktu++;
+                        }
+                    @endphp
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ date('d-m-Y', strtotime($d->tgl_presensi)) }}</td>
+                        <td>{{ $d->jam_in }}</td>
+                        <td>
+                            @if ($d->foto_in && file_exists(public_path('storage/uploads/absensi/' . $d->foto_in)))
+                                <img src="{{ url($path_in) }}" width="40" height="30" alt="Foto Masuk">
+                            @else
+                                <span>-</span>
+                            @endif
+                        </td>
+                        <td>{{ $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</td>
+                        <td>
+                            @if ($d->foto_out && file_exists(public_path('storage/uploads/absensi/' . $d->foto_out)))
+                                <img src="{{ url($path_out) }}" width="40" height="30" alt="Foto Pulang">
+                            @else
+                                <span>-</span>
+                            @endif
+                        </td>
+                        <td>{{ $keterangan }}</td>
+                        <td>{{ $jamKerja }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <!-- Tanda tangan di halaman terakhir -->
+        <!-- Tabel Total Terlambat dan Tepat Waktu -->
+        <table class="tabeltotal">
+            <tr>
+                <td style="vertical-align: top;"><strong>Terlambat:</strong> {{ $totalTerlambat }}</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;"><strong>Tepat Waktu:</strong> {{ $totalTepatWaktu }}</td>
+            </tr>
+        </table>
+
+        <!-- Tanda tangan -->
         <div class="signature-section">
             <table width="100%">
                 <tr>

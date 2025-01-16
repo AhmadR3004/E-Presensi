@@ -35,6 +35,11 @@ class Presensi extends Model
         return $this->belongsTo(Pegawai::class, 'pegawai_id');
     }
 
+    public function konfigurasiLokasi()
+    {
+        return $this->hasOne(KonfigurasiLokasi::class);
+    }
+
     /**
      * Check if the presensi is late (after 9:00 AM)
      */

@@ -4,8 +4,6 @@
 <head>
     <meta charset="utf-8">
     <title>Laporan Rekap Data Izin Sakit Pegawai Bulan {{ $bulan }}-{{ $tahun }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
     <style>
         @page {
             size: A3 landscape;
@@ -16,6 +14,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         .header-line {
@@ -71,39 +70,18 @@
         table {
             page-break-inside: avoid !important;
         }
-
-        @media print {
-            .izin-approved {
-                background-color: green !important;
-                color: white !important;
-            }
-
-            .izin-rejected {
-                background-color: red !important;
-                color: white !important;
-            }
-
-            .izin-pending {
-                background-color: orange !important;
-                color: white !important;
-            }
-        }
     </style>
-    <script>
-        window.onload = function() {
-            window.print();
-        }
-    </script>
 </head>
 
-<body class="A3 landscape">
+<body>
 
     <section class="sheet padding-10mm">
 
         <table style="width: 100%;">
             <tr>
                 <td>
-                    <img src="{{ asset('assets/img/login/logo.png') }}" width="85" height="100" alt="">
+                    <!-- Make sure to use an absolute path for the image -->
+                    <img src="{{ public_path('assets/img/login/logo.png') }}" width="85" height="100" alt="">
                 </td>
                 <td align="center">
                     <p style="margin-bottom: -1em; font-size: 18px">PEMERINTAH KOTA BANJARMASIN</p>

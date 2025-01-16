@@ -94,6 +94,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/presensi', [PresensiController::class, 'laporanPresensi'])->name('laporan.presensi');
     Route::get('/laporan/rekap-presensi', [PresensiController::class, 'laporanRekapPresensi'])->name('laporan.rekap-presensi');
 
+    Route::get('/laporan/pegawai', [PresensiController::class, 'laporanPegawai'])->name('laporan.pegawai');
+    Route::post('/laporan/cetak/pegawai', [PresensiController::class, 'cetakPegawai'])->name('laporan.cetakpegawai');
+
     Route::post('/laporan/cetak/presensi', [PresensiController::class, 'cetakPresensi'])->name('laporan.cetakpresensi');
     Route::post('/laporan/cetak/rekap-presensi', [PresensiController::class, 'cetakRekapPresensi'])->name('laporan.cetakrekap-presensi');
 

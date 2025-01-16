@@ -61,22 +61,17 @@
             overflow: hidden;
         }
     </style>
-
-    <script>
-        window.onload = function() {
-            window.print();
-        }
-    </script>
 </head>
 
 <body class="A3 landscape">
 
-    <section class="sheet padding-10mm">
-
+    <section class="sheet">
+        <!-- Header Laporan -->
         <table style="width: 100%;">
             <tr>
-                <td>
-                    <img src="{{ asset('assets/img/login/logo.png') }}" width="85" height="100" alt="">
+                <td style="width: 100px;">
+                    <img src="{{ public_path('assets/img/login/logo.png') }}" width="85" height="110"
+                        alt="">
                 </td>
                 <td align="center">
                     <p style="margin-bottom: -1em; font-size: 18px">PEMERINTAH KOTA BANJARMASIN</p>
@@ -87,11 +82,8 @@
                 </td>
             </tr>
         </table>
-
         <div class="header-line"></div>
-
         <div style="text-align: right; margin-top: 10px;">Banjarmasin, {{ date('j F Y') }}</div>
-
         <div style="text-align: center;">
             <h2>Laporan Rekap E-PRESENSI Pegawai Bulan
                 @php
