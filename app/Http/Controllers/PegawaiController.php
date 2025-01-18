@@ -12,7 +12,7 @@ class PegawaiController extends Controller
     public function index(Request $request)
     {
         // Membuat query untuk model Pegawai
-        $query = Pegawai::with('jabatan')->orderBy('created_at', 'desc');
+        $query = Pegawai::with('jabatan')->orderBy('jabatan_id', 'asc')->orderBy('created_at', 'desc');  // Urutkan berdasarkan jabatan_id dulu
 
         // Cek apakah ada parameter pencarian untuk 'search' dan 'jabatan_id'
         if ($request->has('search') && $request->search != '') {

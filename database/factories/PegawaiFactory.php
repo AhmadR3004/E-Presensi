@@ -13,8 +13,11 @@ class PegawaiFactory extends Factory
         $faker = \Faker\Factory::create('id_ID');
 
         // Cek jika tabel Jabatan kosong dan ambil jabatan pertama sebagai fallback
-        $jabatan = Jabatan::inRandomOrder()->first();
-        $jabatanId = $jabatan ? $jabatan->id : Jabatan::first()->id; // Menggunakan Jabatan pertama sebagai fallback
+        // Mengambil jabatan acak yang bukan Kepala Dinas dan Kepala UPT
+        $jabatan = Jabatan::whereNotIn('id', [1, 2])->inRandomOrder()->first();
+
+        // Jika tidak ada jabatan yang tersedia (misalnya jika jabatan selain Kepala Dinas dan Kepala UPT habis), fallback ke jabatan pertama selain Kepala Dinas dan Kepala UPT
+        $jabatanId = $jabatan ? $jabatan->id : Jabatan::whereNotIn('id', [1, 2])->first()->id;
 
         return [
             'nama' => $faker->name,
