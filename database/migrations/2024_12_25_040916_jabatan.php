@@ -8,28 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pegawai', function (Blueprint $table) {
-            $table->string('nip')->primary(); // Menjadikan nip sebagai primary key
-            $table->string('foto')->nullable();
-            $table->string('nama');
-            $table->foreignId('jabatan_id')
-                ->constrained('jabatan')
-                ->onDelete('cascade')  // Menambahkan pengaturan untuk menghapus data terkait di tabel pegawai saat jabatan dihapus
-                ->cascadeOnUpdate();
-            $table->text('alamat');
-            $table->string('no_telp')->unique();
-            $table->date('tanggal_lahir');
-            $table->enum('jenis_kelamin', ['L', 'P']);
-            $table->date('tanggal_masuk');
-            $table->string('email');
-            $table->string('password');
-            $table->rememberToken();
+        Schema::create('jabatan', function (Blueprint $table) {
+            $table->id();
+            $table->string('kode_jabatan', 20)->unique();
+            $table->string('nama_jabatan', 100);
+            $table->string('pangkat', 50);
+            $table->string('departemen', 100);
+            $table->string('tingkat_jabatan', 50);
+            $table->decimal('gaji_pokok', 15, 2);
+            $table->decimal('tunjangan', 15, 2)->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('pegawai');
+        Schema::dropIfExists('jabatan');
     }
 };
