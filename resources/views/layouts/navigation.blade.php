@@ -27,7 +27,7 @@
                 <!-- Data Izin/Sakit -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('presensi.dataizinsakit')" :active="request()->routeIs('presensi.dataizinsakit')">
-                        <b>{{ __('Data Izin/Sakit') }}</b>
+                        <b>{{ __('Approval Izin/Sakit') }}</b>
                     </x-nav-link>
                 </div>
 
@@ -199,7 +199,7 @@
         <!-- Data Izin/Sakit -->
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('presensi.dataizinsakit')" :active="request()->routeIs('presensi.dataizinsakit')">
-                {{ __('Data Izin/Sakit') }}
+                {{ __('Approval Izin/Sakit') }}
             </x-responsive-nav-link>
         </div>
 

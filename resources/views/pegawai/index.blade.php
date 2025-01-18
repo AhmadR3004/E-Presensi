@@ -263,6 +263,25 @@
             document.getElementById('show_email').innerText = pegawai.email;
             document.getElementById('show_foto').src = pegawai.foto ? `/storage/uploads/pegawai/${pegawai.foto}` :
                 `default.jpg`;
+
+            // Menambahkan data tambahan dari tabel jabatan
+            document.getElementById('show_kode_jabatan').innerText = pegawai.jabatan.kode_jabatan;
+            document.getElementById('show_pangkat').innerText = pegawai.jabatan.pangkat;
+            document.getElementById('show_departemen').innerText = pegawai.jabatan.departemen;
+            document.getElementById('show_tingkat_jabatan').innerText = pegawai.jabatan.tingkat_jabatan;
+            document.getElementById('show_gaji_pokok').innerText =
+                `Rp ${parseFloat(pegawai.jabatan.gaji_pokok).toLocaleString('id-ID')}`;
+            document.getElementById('show_tunjangan').innerText = pegawai.jabatan.tunjangan ?
+                `Rp ${parseFloat(pegawai.jabatan.tunjangan).toLocaleString('id-ID')}` :
+                '-';
+
+            // Menambahkan total gaji (gaji pokok + tunjangan)
+            const gajiPokok = parseFloat(pegawai.jabatan.gaji_pokok);
+            const tunjangan = parseFloat(pegawai.jabatan.tunjangan || 0); // Pastikan tunjangan adalah angka
+            const totalGaji = gajiPokok + tunjangan;
+
+            // Menampilkan total gaji dalam format 'Rp 1.000.000'
+            document.getElementById('show_total_gaji').innerText = `Rp ${totalGaji.toLocaleString('id-ID')}`;
         }
     </script>
     <script>

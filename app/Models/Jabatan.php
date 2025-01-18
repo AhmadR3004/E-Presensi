@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Jabatan extends Model
 {
     use HasFactory;
 
-    protected $table = 'jabatan'; // Nama tabel
+    protected $table = 'jabatan';
 
-    // Kolom-kolom yang bisa diisi mass-assignment
     protected $fillable = [
         'kode_jabatan',
         'nama_jabatan',
@@ -19,12 +18,14 @@ class Jabatan extends Model
         'departemen',
         'tingkat_jabatan',
         'gaji_pokok',
-        'tunjangan'
+        'tunjangan',
     ];
 
-    // Relasi dengan model Pegawai
+    /**
+     * Relasi ke tabel pegawai.
+     */
     public function pegawai()
     {
-        return $this->hasMany(Pegawai::class, 'jabatan_id');
+        return $this->hasMany(Pegawai::class);
     }
 }

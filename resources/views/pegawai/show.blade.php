@@ -33,6 +33,34 @@
                     <p id="show_jabatan" class="text-gray-900 dark:text-white"></p>
                 </div>
                 <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode Jabatan</label>
+                    <p id="show_kode_jabatan" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pangkat</label>
+                    <p id="show_pangkat" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Departemen</label>
+                    <p id="show_departemen" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tingkat Jabatan</label>
+                    <p id="show_tingkat_jabatan" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gaji Pokok</label>
+                    <p id="show_gaji_pokok" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tunjangan</label>
+                    <p id="show_tunjangan" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total Gaji</label>
+                    <p id="show_total_gaji" class="text-gray-900 dark:text-white"></p>
+                </div>
+                <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
                     <p id="show_alamat" class="text-gray-900 dark:text-white"></p>
                 </div>

@@ -89,11 +89,10 @@ class PegawaiController extends Controller
         return response()->json(['exists' => $exists]);
     }
 
-    public function show($nip)
+    public function show($id)
     {
-        // Gunakan NIP sebagai primary key
-        $pegawai = Pegawai::with('jabatan')->where('nip', $nip)->firstOrFail();
-        return view('pegawai.show', compact('pegawai'));
+        $pegawai = Pegawai::with('jabatan')->where('nip', $id)->firstOrFail();
+        return response()->json($pegawai);
     }
 
     public function edit($nip)
