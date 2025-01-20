@@ -309,8 +309,20 @@ class PresensiController extends Controller
             ->orderBy('tgl_presensi')
             ->get();
 
+        // Menambahkan data pegawai dengan jabatan kepala dinas (asumsi nama jabatan = 'Kepala Dinas')
+        $ttd1 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala Dinas')
+            ->first();
+
+        // Menambahkan data pegawai dengan jabatan kepala upt (asumsi nama jabatan = 'Kepala UPT')
+        $ttd2 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala UPT')
+            ->first();
+
         // Load view untuk laporan presensi
-        $pdf = PDF::loadView('laporan.cetak.presensi', compact('presensi', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namabulan'));
+        $pdf = PDF::loadView('laporan.cetak.presensi', compact('presensi', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namabulan', 'ttd1', 'ttd2'));
 
         // Stream PDF ke browser
         return $pdf->stream('Laporan_Presensi_' . $pegawai->nama . '_' . $namabulan[$bulan] . '_' . $tahun . '.pdf');
@@ -376,8 +388,20 @@ class PresensiController extends Controller
         $dompdfOptions->set('isPhpEnabled', true);
         $dompdf = new Dompdf($dompdfOptions);
 
+        // Menambahkan data pegawai dengan jabatan kepala dinas (asumsi nama jabatan = 'Kepala Dinas')
+        $ttd1 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala Dinas')
+            ->first();
+
+        // Menambahkan data pegawai dengan jabatan kepala upt (asumsi nama jabatan = 'Kepala UPT')
+        $ttd2 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala UPT')
+            ->first();
+
         // Load view untuk laporan rekap presensi
-        $pdf = PDF::loadView('laporan.cetak.rekappresensi', compact('rekap', 'bulan', 'tahun', 'namabulan'));
+        $pdf = PDF::loadView('laporan.cetak.rekappresensi', compact('rekap', 'bulan', 'tahun', 'namabulan', 'ttd1', 'ttd2'));
 
         // Stream PDF ke browser (bukan diunduh)
         return $pdf->stream('Rekap_Presensi_' . $namabulan[$bulan] . '_' . $tahun . '.pdf');
@@ -511,8 +535,20 @@ class PresensiController extends Controller
             '12' => 'Desember',
         ];
 
+        // Menambahkan data pegawai dengan jabatan kepala dinas (asumsi nama jabatan = 'Kepala Dinas')
+        $ttd1 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala Dinas')
+            ->first();
+
+        // Menambahkan data pegawai dengan jabatan kepala upt (asumsi nama jabatan = 'Kepala UPT')
+        $ttd2 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala UPT')
+            ->first();
+
         // Load view untuk laporan izin sakit
-        $pdf = PDF::loadView('laporan.cetak.izinsakit', compact('izinSakit', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namaBulan'));
+        $pdf = PDF::loadView('laporan.cetak.izinsakit', compact('izinSakit', 'nip', 'pegawai', 'jabatan', 'bulan', 'tahun', 'namaBulan', 'ttd1', 'ttd2'));
 
         // Stream PDF ke browser (bukan diunduh)
         return $pdf->stream('Laporan_Izin_Sakit_' . $namaBulan[$bulan] . '_' . $tahun . '.pdf');
@@ -610,8 +646,20 @@ class PresensiController extends Controller
         $dompdfOptions->set('isPhpEnabled', true);
         $dompdf = new Dompdf($dompdfOptions);
 
+        // Menambahkan data pegawai dengan jabatan kepala dinas (asumsi nama jabatan = 'Kepala Dinas')
+        $ttd1 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala Dinas')
+            ->first();
+
+        // Menambahkan data pegawai dengan jabatan kepala upt (asumsi nama jabatan = 'Kepala UPT')
+        $ttd2 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala UPT')
+            ->first();
+
         // Load view untuk laporan rekap presensi
-        $pdf = PDF::loadView('laporan.cetak.rekapizinsakit', compact('rekap', 'bulan', 'tahun', 'namabulan'));
+        $pdf = PDF::loadView('laporan.cetak.rekapizinsakit', compact('rekap', 'bulan', 'tahun', 'namabulan', 'ttd1', 'ttd2'));
 
         // Stream PDF ke browser (bukan diunduh)
         return $pdf->stream('Rekap_Izin_Sakit_' . $namabulan[$bulan] . '_' . $tahun . '.pdf');
@@ -661,8 +709,20 @@ class PresensiController extends Controller
             $jabatan = DB::table('jabatan')->where('id', $jabatan_id)->first();
         }
 
+        // Menambahkan data pegawai dengan jabatan kepala dinas (asumsi nama jabatan = 'Kepala Dinas')
+        $ttd1 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala Dinas')
+            ->first();
+
+        // Menambahkan data pegawai dengan jabatan kepala upt (asumsi nama jabatan = 'Kepala UPT')
+        $ttd2 = DB::table('pegawai')
+            ->join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+            ->where('jabatan.nama_jabatan', 'Kepala UPT')
+            ->first();
+
         // Preview PDF sebelum download
-        $pdf = Pdf::loadView('laporan.cetak.pegawai', compact('pegawai', 'jabatan', 'jabatan_id'));
+        $pdf = Pdf::loadView('laporan.cetak.pegawai', compact('pegawai', 'jabatan', 'jabatan_id', 'ttd1', 'ttd2'));
         return $pdf->stream('laporan-pegawai.pdf');
     }
 }

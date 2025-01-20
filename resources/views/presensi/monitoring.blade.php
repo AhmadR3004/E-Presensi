@@ -108,7 +108,7 @@
                                                         ? gmdate('H:i:s', $jamMasuk - $batasAbsen)
                                                         : '';
                                                     $keterangan = $terlambat
-                                                        ? "Terlambat $selisihTerlambat"
+                                                        ? "Telat $selisihTerlambat"
                                                         : 'Tepat Waktu';
                                                     $badgeClass = $terlambat ? 'bg-red-500' : 'bg-green-500';
                                                 @endphp

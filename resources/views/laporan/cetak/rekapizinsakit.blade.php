@@ -181,32 +181,50 @@
             @endforeach
         </table>
 
-        <div style="text-align: right; margin-top: 20px; font-size: 10px; color: red;">
+        <!-- Keterangan status -->
+        <div class="status-legend" style="text-align: right; margin-top: 20px; font-size: 10px;">
+            <span style="color: green;">• Disetujui (Hijau)</span>
+            <span style="color: orange;">• Pending (Oranye)</span>
+            <span style="color: red;">• Ditolak (Merah)</span>
+        </div>
+
+        <div style="text-align: right; margin-top: 5px; font-size: 10px; color: red;">
             <i>*TI = Total Izin, TS = Total Sakit</i>
         </div>
 
-        <table width="100%">
-            <tr>
-                <td style="text-align: center; vertical-align: bottom; height: 100px">
-                    <p>KEPALA DINAS</p><br>
-                    <br>
-                    <br>
-                    <br>
-                    <u><b>YUSNA IRAWAN, SE, M.Eng</b></u><br>
-                    <b>Pembina Utama Muda (IV/c)</b><br>
-                    <b>NIP. 19721222 200003 1 004</b>
-                </td>
-                <td style="text-align: center; vertical-align: bottom; height: 100px">
-                    <p>Pimpinan</p><br>
-                    <br>
-                    <br>
-                    <br>
-                    <u><b>YUSNA IRAWAN, SE, M.Eng</b></u><br>
-                    <b>Pembina Utama Muda (IV/c)</b><br>
-                    <b>NIP. 19721222 200003 1 004</b>
-                </td>
-            </tr>
-        </table>
+        <!-- Tanda tangan di halaman terakhir -->
+        <div class="signature-section">
+            <table width="100%">
+                <tr>
+                    <td style="text-align: center; vertical-align: bottom; height: 100px">
+                        <p>KEPALA DINAS</p><br>
+                        <br>
+                        <br>
+                        <br>
+                        @if ($ttd1)
+                            <u><b>{{ $ttd1->nama }}</b></u><br>
+                            <b>{{ $ttd1->pangkat }}</b><br>
+                            <b>NIP. {{ $ttd1->nip }}</b>
+                        @else
+                            <b>Data Kepala Dinas Tidak Ditemukan</b>
+                        @endif
+                    </td>
+                    <td style="text-align: center; vertical-align: bottom; height: 100px">
+                        <p>PIMPINAN</p><br>
+                        <br>
+                        <br>
+                        <br>
+                        @if ($ttd2)
+                            <u><b>{{ $ttd2->nama }}</b></u><br>
+                            <b>{{ $ttd2->pangkat }}</b><br>
+                            <b>NIP. {{ $ttd2->nip }}</b>
+                        @else
+                            <b>Data Kepala UPT Tidak Ditemukan</b>
+                        @endif
+                    </td>
+                </tr>
+            </table>
+        </div>
 
     </section>
 

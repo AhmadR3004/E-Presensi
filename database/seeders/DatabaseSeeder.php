@@ -29,79 +29,87 @@ class DatabaseSeeder extends Seeder
         Jabatan::create([
             'kode_jabatan' => 'KD01',
             'nama_jabatan' => 'Kepala Dinas',
-            'pangkat' => 'IV/e',
+            'pangkat' => 'Pembina Utama Muda (IV/c)',
             'departemen' => 'Administrasi Kependudukan',
             'tingkat_jabatan' => 'Struktural',
             'gaji_pokok' => 10000000,
             'tunjangan' => 5000000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD02',
             'nama_jabatan' => 'Kepala UPT',
-            'pangkat' => 'IV/c',
+            'pangkat' => 'Pembina Utama Muda (IV/c)',
             'departemen' => 'Administrasi Kependudukan',
             'tingkat_jabatan' => 'Struktural',
             'gaji_pokok' => 8000000,
             'tunjangan' => 3500000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD03',
             'nama_jabatan' => 'Sekretaris',
-            'pangkat' => 'IV/d',
+            'pangkat' => 'Pembina Utama Madya (IV/d)',
             'departemen' => 'Administrasi Kependudukan',
             'tingkat_jabatan' => 'Struktural',
             'gaji_pokok' => 9000000,
             'tunjangan' => 4000000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD04',
             'nama_jabatan' => 'Kepala Bidang Pelayanan Pendaftaran Penduduk',
-            'pangkat' => 'IV/c',
+            'pangkat' => 'Pembina Utama Muda (IV/c)',
             'departemen' => 'Pelayanan Pendaftaran Penduduk',
             'tingkat_jabatan' => 'Struktural',
             'gaji_pokok' => 8500000,
             'tunjangan' => 3500000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD05',
             'nama_jabatan' => 'Kepala Bidang Pelayanan Pencatatan Sipil',
-            'pangkat' => 'IV/c',
+            'pangkat' => 'Pembina Utama Muda (IV/c)',
             'departemen' => 'Pelayanan Pencatatan Sipil',
             'tingkat_jabatan' => 'Struktural',
             'gaji_pokok' => 8500000,
             'tunjangan' => 3500000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD06',
             'nama_jabatan' => 'Kepala Bidang PIAK dan Pemanfaatan Data',
-            'pangkat' => 'IV/b',
+            'pangkat' => 'Pembina Utama Madya (IV/b)',
             'departemen' => 'PIAK dan Pemanfaatan Data',
             'tingkat_jabatan' => 'Struktural',
             'gaji_pokok' => 8000000,
             'tunjangan' => 3000000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD07',
             'nama_jabatan' => 'Staff Pelayanan',
-            'pangkat' => 'III/a',
+            'pangkat' => 'Pembina Muda (III/a)',
             'departemen' => 'Pelayanan',
             'tingkat_jabatan' => 'Fungsional',
             'gaji_pokok' => 5000000,
             'tunjangan' => 2000000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD08',
             'nama_jabatan' => 'Staff Administrasi',
-            'pangkat' => 'III/a',
+            'pangkat' => 'Pembina Muda (III/a)',
             'departemen' => 'Administrasi',
             'tingkat_jabatan' => 'Fungsional',
             'gaji_pokok' => 5000000,
             'tunjangan' => 2000000,
         ]);
+
         Jabatan::create([
             'kode_jabatan' => 'KD09',
             'nama_jabatan' => 'Operator Sistem',
-            'pangkat' => 'III/b',
+            'pangkat' => 'Pembina Muda (III/b)',
             'departemen' => 'Sistem Informasi',
             'tingkat_jabatan' => 'Fungsional',
             'gaji_pokok' => 6000000,
@@ -140,6 +148,22 @@ class DatabaseSeeder extends Seeder
             'jenis_kelamin' => 'L',
             'tanggal_masuk' => '2000-03-01', // Sesuaikan dengan tanggal masuk pegawai
             'email' => 'yusna.irawan@example.com', // Ganti dengan email yang sesuai
+            'password' => Hash::make('123'), // Enkripsi password
+            'remember_token' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        Pegawai::create([
+            'nip' => '2110020078',
+            'foto' => '2110020078.png',
+            'nama' => 'Ahmad Rosyad',
+            'jabatan_id' => 7, // Jabatan ID untuk Staff
+            'alamat' => 'JL. Kelayan B, Gang Setia Rahman No.23',
+            'no_telp' => '089692572431',
+            'tanggal_lahir' => '2003-04-30',
+            'jenis_kelamin' => 'L',
+            'tanggal_masuk' => '2023-08-01', // Sesuaikan dengan tanggal masuk pegawai
+            'email' => 'ahmadrosyad3004@gmail.com', // Ganti dengan email yang sesuai
             'password' => Hash::make('123'), // Enkripsi password
             'remember_token' => null,
             'created_at' => now(),
