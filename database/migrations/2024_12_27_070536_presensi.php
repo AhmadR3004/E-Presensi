@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('presensi', function (Blueprint $table) {
             $table->id(); // Primary key auto-increment
-            $table->string('pegawai_id'); // Foreign key ke tabel pegawai (menggunakan nip)
+            $table->char('pegawai_id', 18); // Foreign key ke tabel pegawai (menggunakan nip dengan tipe CHAR(18))
             $table->foreign('pegawai_id') // Definisi foreign key
                 ->references('nip') // Referensi ke kolom 'nip' di tabel pegawai
                 ->on('pegawai') // Nama tabel referensi

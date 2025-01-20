@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pegawai', function (Blueprint $table) {
-            $table->string('nip')->primary(); // Menjadikan nip sebagai primary key
+            $table->char('nip', 18)->primary(); // Menggunakan char(18) untuk nip sebagai primary key
             $table->string('foto')->nullable();
             $table->string('nama');
             $table->foreignId('jabatan_id')
