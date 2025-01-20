@@ -78,6 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('pegawai', PegawaiController::class);
+    Route::get('/pegawai/{nip}/edit', [PegawaiController::class, 'edit']);
     Route::get('/check-nip/{nip}', [PegawaiController::class, 'checkNip']);
     Route::get('/check-wa/{no_telp}', [PegawaiController::class, 'checkWa']);
 

@@ -130,8 +130,7 @@
                                                 <div class="flex items-center space-x-4">
                                                     <button type="button"
                                                         class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                                                        data-modal-toggle="editPegawaiModal"
-                                                        onclick="openEditModal({{ $pegawai->nip }})">
+                                                        onclick="openEditModal('{{ $pegawai->nip }}')">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
@@ -215,7 +214,7 @@
     </script>
     <script>
         function openEditModal(nip) {
-            fetch(`/pegawai/${nip}/edit`) // Gantilah id dengan nip
+            fetch(`/pegawai/${nip}/edit`)
                 .then(response => response.json())
                 .then(data => {
                     const pegawai = data.pegawai;
@@ -246,7 +245,13 @@
                         }
                         jabatanSelect.appendChild(option);
                     });
+                    // Tampilkan modal
+                    document.getElementById('editPegawaiModal').classList.remove('hidden');
                 });
+        }
+
+        function closeModal() {
+            document.getElementById('editPegawaiModal').classList.add('hidden');
         }
     </script>
     <script>
