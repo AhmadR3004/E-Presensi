@@ -9,12 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
     <title>Login E-Presensi Pegawai</title>
-    <meta name="description" content="Mobilekit HTML Mobile UI Kit">
-    <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/icon/192x192.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-    <link rel="manifest" href="__manifest.json">
 </head>
 
 <body class="bg-white">
@@ -25,10 +20,8 @@
     </div>
     <!-- * loader -->
 
-
     <!-- App Capsule -->
     <div id="appCapsule" class="pt-8">
-
         <div class="login-form mt-5">
             <div class="section">
                 <img src="assets/img/login/logo.png" alt="image" class="form-image">
@@ -67,37 +60,41 @@
                     </div>
 
                     <div class="form-links mt-2">
-                        <div><a href="{{ route('password.request') }}" class="text-muted">Forgot Password?</a></div>
+                        <div><a href="{{ route('forgot-password-user') }}" class="text-muted">Lupa Password?</a></div>
                     </div>
 
                     <div class="form-button-group">
-                        <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
                     </div>
                 </form>
             </div>
         </div>
-
-
     </div>
     <!-- * App Capsule -->
 
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script>
+        // SweetAlert untuk menampilkan pesan status dari session
+        @if (session('status') && session('message'))
+            Swal.fire({
+                icon: '{{ session('status') }}', // success atau error
+                title: '{{ session('status') == 'success' ? 'Berhasil!' : 'Gagal!' }}',
+                text: '{{ session('message') }}',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
 
     <!-- ///////////// Js Files ////////////////////  -->
-    <!-- Jquery -->
     <script src="{{ asset('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
-    <!-- Bootstrap-->
     <script src="{{ asset('assets/js/lib/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/lib/bootstrap.min.js') }}"></script>
-    <!-- Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
-    <!-- Owl Carousel -->
     <script src="{{ asset('assets/js/plugins/owl-carousel/owl.carousel.min.js') }}"></script>
-    <!-- jQuery Circle Progress -->
     <script src="{{ asset('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
-    <!-- Base Js File -->
     <script src="{{ asset('assets/js/base.js') }}"></script>
-
 
 </body>
 

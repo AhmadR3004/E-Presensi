@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProfileController;
@@ -33,6 +33,14 @@ Route::get('/', function () {
 
 // Route to process the login
 Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
+
+// Route::get('/forgor-password-user', function () {
+//     return view('auth.forgot-password-user');
+// })->name('forgot-password-user');
+
+// Forgot Password Routes
+Route::get('/forgot-password-user', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password-user');
+Route::post('/reset-password-user', [AuthController::class, 'resetPassword'])->name('reset-password');
 
 // Protect routes for authenticated pegawai only
 Route::middleware('auth:pegawai')->group(function () {
