@@ -21,6 +21,13 @@
             <!-- Modal body -->
             <div class="grid gap-4 mb-4 sm:grid-cols-2">
                 <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Foto</label>
+                    <img id="show_foto" src="" alt="Foto Pegawai" class="h-24 w-24 rounded-full">
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
+                </div>
+                <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
                     <p id="show_nama" class="text-gray-900 dark:text-white"></p>
                 </div>
@@ -83,10 +90,6 @@
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                     <p id="show_email" class="text-gray-900 dark:text-white"></p>
-                </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Foto</label>
-                    <img id="show_foto" src="" alt="Foto Pegawai" class="h-24 w-24 rounded-full">
                 </div>
             </div>
         </div>

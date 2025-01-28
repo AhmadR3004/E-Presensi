@@ -153,22 +153,22 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        Pegawai::create([
-            'nip' => '2110020078',
-            'foto' => '2110020078.png',
-            'nama' => 'Ahmad Rosyad',
-            'jabatan_id' => 7, // Jabatan ID untuk Staff
-            'alamat' => 'JL. Kelayan B, Gang Setia Rahman No.23',
-            'no_telp' => '089692572431',
-            'tanggal_lahir' => '2003-04-30',
-            'jenis_kelamin' => 'L',
-            'tanggal_masuk' => '2023-08-01', // Sesuaikan dengan tanggal masuk pegawai
-            'email' => 'ahmadrosyad3004@gmail.com', // Ganti dengan email yang sesuai
-            'password' => Hash::make('123'), // Enkripsi password
-            'remember_token' => null,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Pegawai::create([
+        //     'nip' => '2110020078',
+        //     'foto' => '2110020078.png',
+        //     'nama' => 'Ahmad Rosyad',
+        //     'jabatan_id' => 7, // Jabatan ID untuk Staff
+        //     'alamat' => 'JL. Kelayan B, Gang Setia Rahman No.23',
+        //     'no_telp' => '089692572431',
+        //     'tanggal_lahir' => '2003-04-30',
+        //     'jenis_kelamin' => 'L',
+        //     'tanggal_masuk' => '2023-08-01', // Sesuaikan dengan tanggal masuk pegawai
+        //     'email' => 'ahmadrosyad3004@gmail.com', // Ganti dengan email yang sesuai
+        //     'password' => Hash::make('123'), // Enkripsi password
+        //     'remember_token' => null,
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
 
         // Loop untuk setiap pegawai
         Pegawai::all()->each(function ($pegawai) {
