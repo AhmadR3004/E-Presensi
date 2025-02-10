@@ -7,7 +7,7 @@
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
-        <div class="pageTitle">E-Presensi</div>
+        <div class="pageTitle">Absen {{ $title }}</div>
         <div class="right"></div>
     </div>
     <!-- * App Header -->
@@ -36,12 +36,6 @@
     </div>
     <div class="row mt-1">
         <div class="col">
-            <input type="hidden" id="lokasi">
-            <div class="webcam-capture"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
             @if ($cek == 0)
                 <!-- Absen Masuk -->
                 <button id="takeabsen" class="btn btn-primary btn-block">
@@ -58,6 +52,12 @@
                     <ion-icon name="camera-outline"></ion-icon> Sudah Absen Hari Ini
                 </button>
             @endif
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col">
+            <input type="hidden" id="lokasi">
+            <div class="webcam-capture"></div>
         </div>
     </div>
     <audio id="notifikasi_in">

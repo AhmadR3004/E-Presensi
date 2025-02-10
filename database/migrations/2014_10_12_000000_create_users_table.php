@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +22,14 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        // Tambahkan Admin setelah tabel dibuat
+        User::create([
+            'name' => 'Admin',
+            'email' => 'ahmadrosyad3004@gmail.com',
+            'password' => Hash::make('12345678'),
+            'email_verified_at' => now(),
+        ]);
     }
 
     /**

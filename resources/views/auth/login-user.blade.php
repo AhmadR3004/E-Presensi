@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>Login E-Presensi Pegawai</title>
+    <title>Login {{ $title }} Pegawai</title>
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 
@@ -27,7 +27,7 @@
                 <img src="assets/img/login/logo.png" alt="image" class="form-image">
             </div>
             <div class="section mt-1">
-                <h1>E-Presensi</h1>
+                <h1>{{ $title }}</h1>
                 <h4>Harap login terlebih dahulu!</h4>
             </div>
             <div class="section mt-1 mb-5">
