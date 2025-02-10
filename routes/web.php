@@ -31,8 +31,6 @@ Route::get('/', function () {
     return view('auth.login-user');
 })->name('login-user');
 
-Route::get('/', [AuthController::class, 'index'])->name('login-user');
-
 // Route to process the login
 Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
 
