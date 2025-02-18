@@ -14,6 +14,13 @@
 
 <body class="bg-white">
 
+    {{-- <!-- Button ke Dashboard -->
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <a href="/dashboard" class="btn btn-primary btn-sm">
+            <ion-icon name="speedometer-outline"></ion-icon> Dashboard
+        </a>
+    </div> --}}
+
     <!-- loader -->
     <div id="loader">
         <div class="spinner-border text-primary" role="status"></div>

@@ -12,6 +12,33 @@
                     <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
                 @endif
             </div>
+            <style>
+                .avatar {
+                    width: 64px;
+                    /* Atur lebar bingkai */
+                    height: 64px;
+                    /* Atur tinggi bingkai */
+                    overflow: hidden;
+                    /* Sembunyikan bagian gambar yang keluar bingkai */
+                    border-radius: 50%;
+                    /* Buat bingkai bulat */
+                    display: flex;
+                    /* Untuk memusatkan gambar */
+                    align-items: center;
+                    /* Memusatkan gambar secara vertikal */
+                    justify-content: center;
+                    /* Memusatkan gambar secara horizontal */
+                }
+
+                .avatar img {
+                    width: 100%;
+                    /* Gambar mengisi lebar bingkai */
+                    height: 100%;
+                    /* Gambar mengisi tinggi bingkai */
+                    object-fit: cover;
+                    /* Memastikan gambar mengisi bingkai tanpa merusak proporsi */
+                }
+            </style>
             <div id="user-info" style="margin-left: 8px !important;">
                 <h2 id="user-name" style="font-size: 1.25rem !important; font-weight: bold !important;">
                     {{ Auth::guard('pegawai')->user()->nama }}</h2>

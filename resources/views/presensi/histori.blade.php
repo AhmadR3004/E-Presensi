@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-1">
         <div class="col" id="showhistori"></div>
     </div>
 @endsection
